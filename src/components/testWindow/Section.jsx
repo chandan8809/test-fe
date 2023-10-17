@@ -16,6 +16,19 @@ const Section = ({matches}) => {
     const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
     const previousQuestionRef = useRef(null);
     const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
+
+    const [state, setState] = React.useState({
+      right: false,
+    });
+  
+    const toggleDrawer = (anchor, open) => (event) => {
+      if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+        return;
+      }
+  
+      setState({ ...state, [anchor]: open });
+    };
+  
     
     
   return (
@@ -28,6 +41,8 @@ const Section = ({matches}) => {
           selectedQuestion={selectedQuestion}
           previousQuestionRef={previousQuestionRef}
           lastQuestion={lastQuestionFlag}
+          state={state}
+          toggleDrawer={toggleDrawer}
           />
 
          {matches &&<section className={`absolute top-[calc(50vh-60px)] ${showPallet ? "right-[300px]" :"right-[0px]"}`}>

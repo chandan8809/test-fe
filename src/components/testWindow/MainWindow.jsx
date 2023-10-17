@@ -8,7 +8,7 @@ const MainWindow = () => {
   const matches = useMediaQuery('(min-width:600px)');
   return (
     <div>
-        {matches && <Header/>}
+        {<Header/>}
         <Section matches={matches}/>
     </div>
   )
