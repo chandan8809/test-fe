@@ -44,7 +44,7 @@ const Questions = ({
   return (
     <div className='flex-1'>
 
-        <div className="h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm w-[100%] overflow-auto">
+        <div className="h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm w-[370px] overflow-auto">
             {matches &&<div className="border-r pr-5 ">
             <p className="ml-5 text-sm">SECTION</p>
             </div>}
