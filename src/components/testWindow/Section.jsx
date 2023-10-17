@@ -42,6 +42,7 @@ const Section = ({matches,state,toggleDrawer}) => {
         </section>}
 
         <Questions 
+        matches={matches}
           questionData={questionData} 
           selectedSection={selectedSection} 
           setSelectedSection={setSelectedSection}

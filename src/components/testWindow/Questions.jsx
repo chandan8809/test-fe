@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 
 const Questions = ({
+    matches,
     questionData,
     selectedSection,
     setSelectedSection,
@@ -42,13 +43,14 @@ const Questions = ({
 
   return (
     <div className='flex-1'>
-        <div className="h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm">
-            <div className="border-r pr-5 ">
+
+        <div className="h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm w-[400px] overflow-auto">
+            {matches &&<div className="border-r pr-5 ">
             <p className="ml-5 text-sm">SECTION</p>
-            </div>
+            </div>}
             {questionData.map(each=>(
               <div 
-               className={`py-0.5 px-3 rounded-sm text-center cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
+               className={`py-0.5 px-3 rounded-sm text-center w-[200px] shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
                onClick={()=>{
                 setSelectedSection(each)
                 setSelectedQuestion(each.questionList[0])
@@ -57,8 +59,8 @@ const Questions = ({
                 {each.name}
               </div>
             ))}
-            
         </div>
+
         <div>
             <div className="h-12 border-y  flex  items-center gap-4  justify-between px-5">
             <div className=" pr-5 font-medium">
