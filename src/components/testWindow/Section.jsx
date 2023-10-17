@@ -10,26 +10,13 @@ import DrawerPallet from './DrawerPallet';
 
 
 
-const Section = ({matches}) => {
+const Section = ({matches,state,toggleDrawer}) => {
     const [showPallet,setShowPallet]=useState(true)
     const [selectedSection, setSelectedSection]=useState(questionData[0])
     const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
     const previousQuestionRef = useRef(null);
     const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
 
-    const [state, setState] = React.useState({
-      right: false,
-    });
-  
-    const toggleDrawer = (anchor, open) => (event) => {
-      if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-        return;
-      }
-  
-      setState({ ...state, [anchor]: open });
-    };
-  
-    
     
   return (
     <div className='flex h-[calc(100vh-65px)] relative'>
