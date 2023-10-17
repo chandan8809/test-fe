@@ -6,6 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 
@@ -19,7 +20,8 @@ const Questions = ({
     setLastQuestion
 }) => {
     const [selectedOption, setSelectedOption] = useState(null);
-    console.log("slected",selectedOption)
+    
+
     const handleRadioClick = (option) => {
         if (selectedOption === option) {
             // If the clicked option is already selected, clear the selection
@@ -44,13 +46,13 @@ const Questions = ({
   return (
     <div className='flex-1'>
 
-        <div className="h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm w-[370px] overflow-auto">
+        <div className={`h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm overflow-auto  ${matches ?"w-full":"w-[370px]"}`}>
             {matches &&<div className="border-r pr-5 ">
             <p className="ml-5 text-sm">SECTION</p>
             </div>}
             {questionData.map(each=>(
               <div 
-               className={`py-0.5 px-3 rounded-sm text-center w-[200px] shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
+               className={`py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
                onClick={()=>{
                 setSelectedSection(each)
                 setSelectedQuestion(each.questionList[0])
@@ -134,14 +136,15 @@ const Questions = ({
                         }
                      }}
                      >
-                    Mark for Review & Next
+                    {matches ?"Mark for Review & Next":"Mark & Next"}
                     </div>
 
                     <div 
                      onClick={()=>setSelectedOption(null)}
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      >
-                     Clear Response
+                    {matches ?"Clear Response":"Clear"}
+                     
                     </div>
 
                     <div 
@@ -171,7 +174,8 @@ const Questions = ({
                         }
                      }}
                      >
-                     Save & Next
+                     {matches ?"Save & Next":"Save & Next"}
+                     
                     </div>
                 </div>
             </div>

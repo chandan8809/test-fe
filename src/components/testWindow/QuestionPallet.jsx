@@ -99,7 +99,7 @@ const QuestionPallet = ({
                 </div>
             </div>
 
-           <div className='flex flex-wrap gap-3 p-4 h-[calc(100dvh-355px)] overflow-scroll'>
+           <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${matches ? "h-[calc(100vh-292px)]":"h-[calc(100vh-355px)]"} `}>
                 {selectedSection.questionList.map((each)=>{
                     // const targetQuestion=selectedSection.questionList.find((ques)=>ques._id===selectedQuestion._id)
                     // selectedQuestion.status="notVisited"
