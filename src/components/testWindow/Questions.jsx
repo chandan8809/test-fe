@@ -74,7 +74,7 @@ const Questions = ({
         </div>
 
         <div>
-            <div className="h-12 border-y  flex  items-center gap-4  justify-between px-5">
+            <div className={`h-12 border-y  flex  items-center gap-4  justify-between ${bigScreenView ?"px-5":"px-2.5"}`}>
             <div className=" pr-5 font-medium">
             {bigScreenView ? <p className=" text-sm">Question No. {selectedQuestion.id}</p>:<p className=" text-sm">Question No. {selectedQuestion.id}</p>} 
             </div>
@@ -102,7 +102,7 @@ const Questions = ({
             </div>
         </div>
 
-        <section className='p-5'>
+        <section className={`${bigScreenView ?'p-5':"p-2.5"}`}>
             <div className='Question '>{selectedQuestion.question}</div>
             <div className='Answer py-4'>
                 <div>
