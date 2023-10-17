@@ -9,7 +9,7 @@ const MainWindow = () => {
   return (
     <div>
         {matches && <Header/>}
-        <Section/>
+        <Section matches={matches}/>
     </div>
   )
 }

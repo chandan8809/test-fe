@@ -26,12 +26,13 @@ const QuestionPallet = ({
     setSelectedQuestion, 
     selectedQuestion,
     previousQuestionRef,
-    lastQuestion
+    lastQuestion,
+    matches
 }) => {
     console.log("lastQuesiton",lastQuestion)
   return (
     <>
-    {showPallet &&<div className='bg-sky-100 border w-[300px] relative z-[10]'>
+    {showPallet && matches &&<div className='bg-sky-100 border w-[300px] relative z-[10]'>
         <section className='border-b border-gray-300 col-span-1 px-3 py-2 '>
             <div className='flex items-center gap-2'>
 
