@@ -1,29 +1,58 @@
 import React, { useState } from 'react'
 import Countdown from 'react-countdown';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 
-const Questions = ({sectionList,selectedSection,setSelectedSection}) => {
+const Questions = ({
+    questionData,
+    selectedSection,
+    setSelectedSection,
+    selectedQuestion,
+    setSelectedQuestion,
+    setLastQuestion
+}) => {
     const [selectedOption, setSelectedOption] = useState(null);
-  const handleRadioClick = (option) => {
-    if (selectedOption === option) {
-        // If the clicked option is already selected, clear the selection
-        setSelectedOption(null);
-      } else {
-        // Otherwise, select the clicked option
-        setSelectedOption(option);
-      }
-  };
+    console.log("slected",selectedOption)
+    const handleRadioClick = (option) => {
+        if (selectedOption === option) {
+            // If the clicked option is already selected, clear the selection
+            setSelectedOption(null);
+        } else {
+            // Otherwise, select the clicked option
+            setSelectedOption(option);
+        }
+    };
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+        setLastQuestion(true)
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
   return (
     <div className='flex-1'>
         <div className="h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm">
             <div className="border-r pr-5 ">
             <p className="ml-5 text-sm">SECTION</p>
             </div>
-            {sectionList.map(each=>(
+            {questionData.map(each=>(
               <div 
                className={`py-0.5 px-3 rounded-sm text-center cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
-               onClick={()=>setSelectedSection(each)}
+               onClick={()=>{
+                setSelectedSection(each)
+                setSelectedQuestion(each.questionList[0])
+               }}
                >
                 {each.name}
               </div>
@@ -33,7 +62,7 @@ const Questions = ({sectionList,selectedSection,setSelectedSection}) => {
         <div>
             <div className="h-12 border-y  flex  items-center gap-4  justify-between px-5">
             <div className=" pr-5 font-medium">
-            <p className=" text-sm">Question No. 1</p>
+            <p className=" text-sm">Question No. {selectedQuestion.id}</p>
             </div>
 
             <div className="flex gap-3">
@@ -61,60 +90,116 @@ const Questions = ({sectionList,selectedSection,setSelectedSection}) => {
         </div>
 
         <section className='p-5'>
-            <div className='Question '> if X:Y = 9:5 ; then find the value of X and Y ?</div>
+            <div className='Question '>{selectedQuestion.question}</div>
             <div className='Answer py-4'>
-                {/* <FormControl>
-                <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
-                    name="radio-buttons-group"
-                >
-                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                    <FormControlLabel value="heli" control={<Radio />} label="Trans" />
-                </RadioGroup>
-                </FormControl> */}
                 <div>
-
-                    <div className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick('Option 1')}>
-                        <input type="radio" name="radioOption" value="Option 1" checked={selectedOption === 'Option 1'} />
-                        <label for="html" className='ml-2'>HTML</label>
-                    </div>
-
-                    <div className=' hover:bg-gray-100 p-2' onClick={() => handleRadioClick('Option 2')}>
-                    <input type="radio" name="radioOption" value="Option 2" checked={selectedOption === 'Option 2'} />
-                          <label for="css" className='ml-2'>CSS</label>
-                    </div>
-                    <div className=' hover:bg-gray-100 p-2' onClick={() => handleRadioClick('Option 3')}>
-                    <input type="radio" name="radioOption" value="Option 3" checked={selectedOption === 'Option 3'} />
-                          <label for="css" className='ml-2'>Javascript</label>
-                    </div>
-                   
-
-        
-                    
+                    {selectedQuestion.options.map((each,idx)=>(
+                        <div className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.value)}>
+                            <input type="radio" name="radioOption" value={each.value} checked={selectedOption === each.value} />
+                            <label for="html" className='ml-2'>{each.value}</label>
+                        </div>
+                    ))}
                 </div>
-
             </div>
-
-            
-            
         </section>
 
-        <footer className='absolute w-full bottom-0 z-[-10]'>
+        <footer className='absolute w-full bottom-0 '>
             <div>
                 <div className="h-[52px] border-2  flex  items-center gap-2 bg-gray-50 shadow-sm px-4">
-                    <div className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer">
+                    <div 
+                     className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
+                     onClick={()=>{
+                        if(selectedQuestion.id < selectedSection?.questionList.length){
+                            setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
+                            if(selectedOption){
+                                selectedQuestion.status="markedAndAnswered"
+                                setSelectedOption(null)
+                            }
+                            else{
+                                selectedQuestion.status="marked"
+                            }
+                        }
+                        if(selectedQuestion.id === selectedSection?.questionList.length){
+                            console.log("hello",selectedQuestion)
+                            if(selectedOption){
+                                selectedQuestion.status="markedAndAnswered"
+                                setSelectedOption(null)
+                            }
+                            else{
+                                selectedQuestion.status="marked"
+                            }
+                            handleClickOpen()
+                        }
+                     }}
+                     >
                     Mark for Review & Next
                     </div>
-                    <div className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer">
-                    Clear Response
+
+                    <div 
+                     onClick={()=>setSelectedOption(null)}
+                     className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
+                     >
+                     Clear Response
+                    </div>
+
+                    <div 
+                     
+                     className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
+                     onClick={()=>{
+                        if(selectedQuestion.id < selectedSection?.questionList.length){
+                            setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
+                            if(selectedOption){
+                                selectedQuestion.status="answerd"
+                                setSelectedOption(null)
+                            }
+                            else{
+                                selectedQuestion.status="notAnswered"
+                            }
+                        }
+                        if(selectedQuestion.id === selectedSection?.questionList.length){
+                            console.log("hello",selectedQuestion)
+                            if(selectedOption){
+                                selectedQuestion.status="answerd"
+                                setSelectedOption(null)
+                            }
+                            else{
+                                selectedQuestion.status="notAnswered"
+                            }
+                            handleClickOpen()
+                        }
+                     }}
+                     >
+                     Save & Next
                     </div>
                 </div>
             </div>
             
         </footer>
+
+        <div>
+        
+         <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+            {" Last Question"}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+               You moved to the last Question, Do you want to move to first Question ?
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={handleClose}>No</Button>
+            <Button onClick={handleClose} autoFocus>
+                Yes
+            </Button>
+            </DialogActions>
+        </Dialog>
+        </div>
         
 
         </div>

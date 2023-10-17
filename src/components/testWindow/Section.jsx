@@ -1,19 +1,18 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Questions from './Questions';
 import QuestionPallet from './QuestionPallet';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
+import questionData from './../../data/questions.json'
 
-const sectionList=[
-    {name:"General Apptitiude", id:1},
-    {name:"General Reasoning", id:2},
-    {name:"English", id:3},
-    {name:"Quantative App", id:4},
-]
+
 
 const Section = () => {
     const [showPallet,setShowPallet]=useState(true)
-    const [selectedSection, setSelectedSection]=useState(sectionList[0])
+    const [selectedSection, setSelectedSection]=useState(questionData[0])
+    const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
+    const previousQuestionRef = useRef(null);
+    const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
     
     
   return (
@@ -28,8 +27,24 @@ const Section = () => {
             </div>
         </section>
 
-        <Questions sectionList={sectionList} selectedSection={selectedSection} setSelectedSection={setSelectedSection}/>
-        <QuestionPallet showPallet={showPallet} selectedSection={selectedSection}/>
+        <Questions 
+          questionData={questionData} 
+          selectedSection={selectedSection} 
+          setSelectedSection={setSelectedSection}
+          selectedQuestion={selectedQuestion}
+          setSelectedQuestion={setSelectedQuestion}
+          previousQuestionRef={previousQuestionRef}
+          setLastQuestion={setLastQuestionFlag}
+         
+          />
+        <QuestionPallet 
+          showPallet={showPallet} 
+          selectedSection={selectedSection} 
+          setSelectedQuestion={setSelectedQuestion}
+          selectedQuestion={selectedQuestion}
+          previousQuestionRef={previousQuestionRef}
+          lastQuestion={lastQuestionFlag}
+          />
     </div>
 
   );

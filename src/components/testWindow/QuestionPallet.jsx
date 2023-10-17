@@ -4,11 +4,34 @@ import { lightBlue ,green } from '@mui/material/colors';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
-const QuestionPallet = ({showPallet,selectedSection}) => {
-    const array = new Array(100).fill(undefined);
+const questionStatus={
+    "answerd":"rounded-t-full bg-green-600  text-white",
+    "marked":"rounded-full bg-purple-600  text-white",
+    "notVisited":3,
+    "markedAndAnswered":"rounded-full bg-purple-600  text-white ",
+    "notAnswered":"rounded-b-full bg-red-700  text-white"
+  }
+
+const questionStatusSelected={
+    "answerd":"rounded-full bg-green-600  text-white",
+    "marked":"rounded-full bg-purple-600  text-white",
+    "notVisited":3,
+    "markedAndAnswered":"rounded-full bg-purple-600  text-white ",
+    "notAnswered":"rounded-full bg-red-700  text-white"
+  }
+
+const QuestionPallet = ({
+    showPallet,
+    selectedSection,
+    setSelectedQuestion, 
+    selectedQuestion,
+    previousQuestionRef,
+    lastQuestion
+}) => {
+    console.log("lastQuesiton",lastQuestion)
   return (
     <>
-    {showPallet &&<div className='bg-sky-100 border w-[300px]'>
+    {showPallet &&<div className='bg-sky-100 border w-[300px] relative z-[10]'>
         <section className='border-b border-gray-300 col-span-1 px-3 py-2 '>
             <div className='flex items-center gap-2'>
 
@@ -23,13 +46,13 @@ const QuestionPallet = ({showPallet,selectedSection}) => {
         <section className='border-b border-gray-300 py-2 col-span-1 px-3 pt-1'>
             <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-0.5'>
-                    <div className='border h-6 w-6 rounded-t-full bg-green-600 flex justify-center items-center text-white text-xs font-bold'>
+                    <div className='border h-6 w-6 flex justify-center items-center text-xs font-bold rounded-t-full bg-green-600  text-white '>
                         0
                     </div>
                     <p className='text-xs '>Answered</p>
                 </div>
                 <div className='flex items-center gap-0.5'>
-                    <div className='border h-6 w-6 rounded-full bg-purple-600 flex justify-center items-center text-white text-xs font-bold'>
+                    <div className='border h-6 w-6 flex justify-center items-center text-xs font-bold rounded-full bg-purple-600  text-white '>
                         0
                     </div>
                     <p className='text-xs'>Marked</p>
@@ -49,7 +72,7 @@ const QuestionPallet = ({showPallet,selectedSection}) => {
                     <div className='absolute top-[-12px] left-[10px]'>
                     < CheckRoundedIcon sx={{color: green[700],height:"15px",width:"15px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
                     </div>
-                    <div className='border h-6 w-6 rounded-full bg-purple-600 flex justify-center items-center text-white text-xs font-bold'>
+                    <div className='border h-6 w-6 flex justify-center text-xs font-bold items-center rounded-full bg-purple-600  text-white '>
                         10
                     </div>
                 
@@ -57,7 +80,7 @@ const QuestionPallet = ({showPallet,selectedSection}) => {
                     <p className='text-xs '>Marked and answered</p>
                 </div>
                 <div className='flex items-center gap-0.5'>
-                    <div className='border h-6 w-6 rounded-b-full bg-red-700 flex justify-center items-center text-white text-xs font-bold'>
+                    <div className='border h-6 w-6 flex justify-center text-xs font-bold items-center rounded-b-full bg-red-700  text-white '>
                         0
                     </div>
                     <p className='text-xs '>Not Answered</p>
@@ -76,15 +99,44 @@ const QuestionPallet = ({showPallet,selectedSection}) => {
             </div>
 
            <div className='flex flex-wrap gap-3 p-4 h-[calc(100vh-355px)] overflow-scroll'>
-                {array.map((each,idx)=>{
+                {selectedSection.questionList.map((each)=>{
+                    // const targetQuestion=selectedSection.questionList.find((ques)=>ques._id===selectedQuestion._id)
+                    // selectedQuestion.status="notVisited"
+                    // if( targetQuestion){
+                    //     targetQuestion.status="notVisited"
+                    // }
+                    
                     return(
-                        <div>
-                             <div className='flex items-center gap-0.5'>
-                                <div className='border border-black h-7 w-10  bg-white flex justify-center items-center font-medium'>
-                                    {idx+1}
-                                </div>
-                            </div>
-
+                        <div 
+                         className={`
+                          relative h-7 w-10  flex justify-center items-center font-medium cursor-pointer  
+                          ${(each.status && each._id===selectedQuestion._id) 
+                            ? 
+                            questionStatusSelected[each.status] 
+                            : 
+                            each.status 
+                            ?  
+                            questionStatus[each.status] 
+                            : 
+                            each._id===selectedQuestion._id
+                            ? 
+                            "border border-black bg-white text-black rounded-full"
+                            : 
+                            "border border-black bg-white"
+                          }`}
+                         onClick={()=>{
+                            previousQuestionRef.current = selectedQuestion
+                            if(!previousQuestionRef.current.status){
+                                console.log("helo",previousQuestionRef.current.status)
+                                previousQuestionRef.current.status = "notAnswered"
+                            }
+                            setSelectedQuestion(each)
+                        }} 
+                        >
+                            {each.status==="markedAndAnswered" && <div className='absolute top-[-10px] left-[22px]'>
+                            < CheckRoundedIcon sx={{color: green[700],height:"18px",width:"18px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
+                            </div>}
+                            {each.id}
                         </div>
                     )
                 })}
