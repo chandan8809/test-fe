@@ -33,7 +33,7 @@ const Questions = ({
 
     const handleClickOpen = () => {
         setOpen(true);
-        setLastQuestion(true)
+        setLastQuestion((prev)=>prev+1)
     };
 
     const handleClose = () => {
@@ -194,7 +194,11 @@ const Questions = ({
             </DialogContent>
             <DialogActions>
             <Button onClick={handleClose}>No</Button>
-            <Button onClick={handleClose} autoFocus>
+            <Button onClick={()=>{
+                setSelectedQuestion(selectedSection.questionList[0])
+                handleClose()
+                }} 
+                autoFocus>
                 Yes
             </Button>
             </DialogActions>
