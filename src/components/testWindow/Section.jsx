@@ -19,7 +19,7 @@ const Section = ({matches,state,toggleDrawer}) => {
 
     
   return (
-    <div className='flex h-[calc(100vh-65px)] relative'>
+    <div className='flex h-[calc(100dvh-65px)] relative'>
         <DrawerPallet  
           matches={true}
           showPallet={showPallet} 
