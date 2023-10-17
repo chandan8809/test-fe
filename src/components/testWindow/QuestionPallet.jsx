@@ -27,9 +27,10 @@ const QuestionPallet = ({
     selectedQuestion,
     previousQuestionRef,
     lastQuestion,
-    matches
+    matches,
+    dialog
 }) => {
-    console.log("lastQuesiton",lastQuestion)
+    console.log("lastQuesiton",lastQuestion,matches)
   return (
     <>
     {showPallet && matches &&<div className='bg-sky-100 border w-[300px] relative z-[10]'>
@@ -99,7 +100,7 @@ const QuestionPallet = ({
                 </div>
             </div>
 
-           <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${matches ? "h-[calc(100dvh-292px)]":"h-[calc(100dvh-355px)]"} `}>
+           <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
                 {selectedSection.questionList.map((each)=>{
                     // const targetQuestion=selectedSection.questionList.find((ques)=>ques._id===selectedQuestion._id)
                     // selectedQuestion.status="notVisited"

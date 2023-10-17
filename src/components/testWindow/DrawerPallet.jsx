@@ -11,7 +11,8 @@ export default function DrawerPallet({
     previousQuestionRef,
     lastQuestion,
     matches,
-    state,toggleDrawer
+    state,
+    toggleDrawer,
 }) {
   
   
@@ -33,6 +34,7 @@ export default function DrawerPallet({
             selectedQuestion={selectedQuestion}
             previousQuestionRef={previousQuestionRef}
             lastQuestion={lastQuestion}
+            dialog={"true"}
             />
           </Drawer>
         </React.Fragment>

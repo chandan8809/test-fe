@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Countdown from 'react-countdown';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -43,19 +43,29 @@ const Questions = ({
         setOpen(false);
     };
 
+    const containerRef = useRef(null);
+    const [selectedItem, setSelectedItem] = useState(null);
+  
+    const scrollToItem = (itemIndex) => {
+      const item = containerRef.current.children[itemIndex];
+      item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    };
+
   return (
     <div className='flex-1'>
 
-        <div className={`h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm overflow-auto  ${matches ?"w-full":"w-[370px]"}`}>
+        <div ref={containerRef} className={`h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm overflow-auto  ${matches ?"w-full":"w-[370px]"}`}>
             {matches &&<div className="border-r pr-5 ">
             <p className="ml-5 text-sm">SECTION</p>
             </div>}
-            {questionData.map(each=>(
+            {questionData.map((each,index)=>(
               <div 
-               className={`py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
+               className={`scrollable-item ${selectedItem === index ? "selected" : ""} py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
                onClick={()=>{
                 setSelectedSection(each)
                 setSelectedQuestion(each.questionList[0])
+                setSelectedItem(index)
+                scrollToItem(index)
                }}
                >
                 {each.name}
@@ -66,12 +76,12 @@ const Questions = ({
         <div>
             <div className="h-12 border-y  flex  items-center gap-4  justify-between px-5">
             <div className=" pr-5 font-medium">
-            <p className=" text-sm">Question No. {selectedQuestion.id}</p>
+            {matches ? <p className=" text-sm">Question No. {selectedQuestion.id}</p>:<p className=" text-sm">{selectedQuestion.id}</p>} 
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 items-center">
             <div>
-                <p className="text-sm">Marks</p>
+                {matches && <p className="text-sm">Marks</p>}
                 <div className="flex text-xs gap-0.5">
                 <div className="bg-green-600 w-8 py-0.5 rounded-full text-center text-white font-bold">
                     +1
@@ -82,11 +92,10 @@ const Questions = ({
                 </div>
             </div>
             <div>
-                <p className="text-sm">Time</p>
+                {matches && <p className="text-sm">Time</p>}
                 <div className="flex text-sm gap-0.5">
                 <Countdown
                     date={Date.now() + 1000000}
-                   
                 />
                 </div>
             </div>
