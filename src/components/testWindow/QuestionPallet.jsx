@@ -27,13 +27,13 @@ const QuestionPallet = ({
     selectedQuestion,
     previousQuestionRef,
     lastQuestion,
-    matches,
+    bigScreenView,
     dialog
 }) => {
-    console.log("lastQuesiton",lastQuestion,matches)
+    console.log("lastQuesiton",lastQuestion,bigScreenView)
   return (
     <>
-    {showPallet && matches &&<div className='bg-sky-100 border w-[300px] relative z-[10]'>
+    {showPallet && bigScreenView &&<div className='bg-sky-100 border w-[300px] relative z-[10]'>
         <section className='border-b border-gray-300 col-span-1 px-3 py-2 '>
             <div className='flex items-center gap-2'>
 

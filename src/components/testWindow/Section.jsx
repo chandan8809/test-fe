@@ -10,7 +10,7 @@ import DrawerPallet from './DrawerPallet';
 
 
 
-const Section = ({matches,state,toggleDrawer}) => {
+const Section = ({bigScreenView,state,toggleDrawer}) => {
     const [showPallet,setShowPallet]=useState(true)
     const [selectedSection, setSelectedSection]=useState(questionData[0])
     const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
@@ -21,7 +21,7 @@ const Section = ({matches,state,toggleDrawer}) => {
   return (
     <div className='flex h-[calc(100dvh-65px)] relative'>
         <DrawerPallet  
-          matches={true}
+          bigScreenView={true}
           showPallet={showPallet} 
           selectedSection={selectedSection} 
           setSelectedQuestion={setSelectedQuestion}
@@ -32,7 +32,7 @@ const Section = ({matches,state,toggleDrawer}) => {
           toggleDrawer={toggleDrawer}
           />
 
-         {matches &&<section className={`absolute top-[calc(50vh-60px)] ${showPallet ? "right-[300px]" :"right-[0px]"}`}>
+         {bigScreenView &&<section className={`absolute top-[calc(50vh-60px)] ${showPallet ? "right-[300px]" :"right-[0px]"}`}>
             <div 
              className='border border-gray-700 bg-gray-800 text-white h-[50px] flex items-center rounded-l-sm'
              onClick={()=>setShowPallet(!showPallet)}
@@ -42,7 +42,7 @@ const Section = ({matches,state,toggleDrawer}) => {
         </section>}
 
         <Questions 
-        matches={matches}
+        bigScreenView={bigScreenView}
           questionData={questionData} 
           selectedSection={selectedSection} 
           setSelectedSection={setSelectedSection}
@@ -53,7 +53,7 @@ const Section = ({matches,state,toggleDrawer}) => {
          
           />
         <QuestionPallet 
-          matches={matches}
+          bigScreenView={bigScreenView}
           showPallet={showPallet} 
           selectedSection={selectedSection} 
           setSelectedQuestion={setSelectedQuestion}

@@ -11,7 +11,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const Questions = ({
-    matches,
+    bigScreenView,
     questionData,
     selectedSection,
     setSelectedSection,
@@ -54,8 +54,8 @@ const Questions = ({
   return (
     <div className='flex-1'>
 
-        <div ref={containerRef} className={`h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm overflow-auto  ${matches ?"w-full":"w-[370px]"}`}>
-            {matches &&<div className="border-r pr-5 ">
+        <div ref={containerRef} className={`h-12 border-y-1.5  flex  items-center gap-2 bg-gray-50 shadow-sm overflow-auto  ${bigScreenView ?"w-full":"w-[370px]"}`}>
+            {bigScreenView &&<div className="border-r pr-5 ">
             <p className="ml-5 text-sm">SECTION</p>
             </div>}
             {questionData.map((each,index)=>(
@@ -76,12 +76,12 @@ const Questions = ({
         <div>
             <div className="h-12 border-y  flex  items-center gap-4  justify-between px-5">
             <div className=" pr-5 font-medium">
-            {matches ? <p className=" text-sm">Question No. {selectedQuestion.id}</p>:<p className=" text-sm">{selectedQuestion.id}</p>} 
+            {bigScreenView ? <p className=" text-sm">Question No. {selectedQuestion.id}</p>:<p className=" text-sm">Question No. {selectedQuestion.id}</p>} 
             </div>
 
             <div className="flex gap-3 items-center">
             <div>
-                {matches && <p className="text-sm">Marks</p>}
+                {bigScreenView && <p className="text-sm">Marks</p>}
                 <div className="flex text-xs gap-0.5">
                 <div className="bg-green-600 w-8 py-0.5 rounded-full text-center text-white font-bold">
                     +1
@@ -92,7 +92,7 @@ const Questions = ({
                 </div>
             </div>
             <div>
-                {matches && <p className="text-sm">Time</p>}
+                {bigScreenView && <p className="text-sm">Time</p>}
                 <div className="flex text-sm gap-0.5">
                 <Countdown
                     date={Date.now() + 1000000}
@@ -145,14 +145,14 @@ const Questions = ({
                         }
                      }}
                      >
-                    {matches ?"Mark for Review & Next":"Mark & Next"}
+                    {bigScreenView ?"Mark for Review & Next":"Mark & Next"}
                     </div>
 
                     <div 
                      onClick={()=>setSelectedOption(null)}
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      >
-                    {matches ?"Clear Response":"Clear"}
+                    {bigScreenView ?"Clear Response":"Clear"}
                      
                     </div>
 
@@ -183,7 +183,7 @@ const Questions = ({
                         }
                      }}
                      >
-                     {matches ?"Save & Next":"Save & Next"}
+                     {bigScreenView ?"Save & Next":"Save & Next"}
                      
                     </div>
                 </div>

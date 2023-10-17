@@ -6,7 +6,7 @@ import MobileHeader from './MobileHeader';
 
 
 const MainWindow = () => {
-  const matches = useMediaQuery('(min-width:600px)');
+  const bigScreenView = useMediaQuery('(min-width:600px)');
   const [state, setState] = React.useState({
     right: false,
   });
@@ -21,9 +21,9 @@ const MainWindow = () => {
 
   return (
     <div>
-        {matches && <Header/>}
-        {!matches && <MobileHeader toggleDrawer={toggleDrawer}/>}
-        <Section matches={matches} state={state} toggleDrawer={toggleDrawer}/>
+        {bigScreenView && <Header/>}
+        {!bigScreenView && <MobileHeader toggleDrawer={toggleDrawer}/>}
+        <Section bigScreenView={bigScreenView} state={state} toggleDrawer={toggleDrawer}/>
     </div>
   )
 }

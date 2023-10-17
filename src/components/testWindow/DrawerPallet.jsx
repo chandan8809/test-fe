@@ -10,7 +10,7 @@ export default function DrawerPallet({
     selectedQuestion,
     previousQuestionRef,
     lastQuestion,
-    matches,
+    bigScreenView,
     state,
     toggleDrawer,
 }) {
@@ -27,7 +27,7 @@ export default function DrawerPallet({
             onClose={toggleDrawer(anchor, false)}
           >
            <QuestionPallet
-            matches={matches}
+            bigScreenView={bigScreenView}
             showPallet={showPallet} 
             selectedSection={selectedSection} 
             setSelectedQuestion={setSelectedQuestion}
