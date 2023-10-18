@@ -1,14 +1,12 @@
 import React, { useRef, useState } from 'react'
-import Countdown from 'react-countdown';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
+import { useStopwatch } from 'react-timer-hook';
 
 
 const Questions = ({
@@ -20,6 +18,14 @@ const Questions = ({
     setSelectedQuestion,
     setLastQuestion
 }) => {
+    const {
+        seconds,
+        minutes,
+        start,
+        pause,
+        reset,
+      } = useStopwatch({ autoStart: true });
+
     const [selectedOption, setSelectedOption] = useState(null);
     
 
@@ -96,9 +102,9 @@ const Questions = ({
                 {bigScreenView && <p className="text-sm">Time</p>}
                 <div className="flex text-sm gap-0.5 items-center">
                     {!bigScreenView && <AccessTimeIcon sx={{height:"20px"}}/>}
-                <Countdown
-                    date={Date.now() + 1000000}
-                />
+                    <div style={{fontSize: '15px'}}>
+                     <span>{minutes}</span>:<span>{seconds}</span>
+                    </div>
                 </div>
             </div>
             </div>

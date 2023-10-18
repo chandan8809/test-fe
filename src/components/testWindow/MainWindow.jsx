@@ -18,10 +18,13 @@ const MainWindow = () => {
     setState({ ...state, [anchor]: open });
   };
 
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 600);
+
 
   return (
     <div>
-        {bigScreenView && <Header/>}
+        {bigScreenView && <Header expiryTimestamp={time}/>}
         {!bigScreenView && <MobileHeader toggleDrawer={toggleDrawer}/>}
         <Section bigScreenView={bigScreenView} state={state} toggleDrawer={toggleDrawer}/>
     </div>

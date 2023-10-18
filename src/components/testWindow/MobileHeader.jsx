@@ -3,9 +3,6 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import SegmentIcon from '@mui/icons-material/Segment';
 
 import Countdown from 'react-countdown';
-import SubjectIcon from '@mui/icons-material/Subject';
-import AspectRatioIcon from '@mui/icons-material/AspectRatio';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 
 const MobileHeader = ({toggleDrawer}) => {
@@ -51,7 +48,7 @@ const MobileHeader = ({toggleDrawer}) => {
         </div>
         
         <div>
-            <CropSquareIcon onClick={toggleFullScreen} sx={{color:"white", height:"40px", width:"60px"}}/>
+            <CropSquareIcon onClick={toggleFullScreen} sx={{color:"white", height:"34px", width:"34px"}}/>
             <SegmentIcon onClick={toggleDrawer("right",true)} sx={{color:"white", height:"40px", width:"60px"}}/>
         </div>
      

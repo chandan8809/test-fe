@@ -5,10 +5,26 @@ import Typography from '@mui/material/Typography';
 import testAppImage from "./../../assets/testAppLogo.png"
 import { Stack } from '@mui/material';
 import Countdown from 'react-countdown';
+import { useTimer } from 'react-timer-hook';
 
 
 
-function Header() {
+function Header({ expiryTimestamp }) {
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 600);
+
+  const {
+    totalSeconds,
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({ expiryTimestamp, onExpire: () => console.warn('onExpire called') });
     
     const [isFullScreen, setIsFullScreen] = React.useState(false);
 
@@ -74,7 +90,9 @@ function Header() {
             >
             {"Time Left"}
             </Typography>
-            <Countdown date={Date.now() + 1000000}  className='font-semibold'/>
+            <div style={{fontSize: '15px'}} className='font-medium'>
+            <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+            </div>
         </div>
        </Stack>
 
