@@ -100,7 +100,7 @@ const Questions = ({
 
     useEffect(()=>{
         if(selectedQuestion.answerId){
-            handleRadioClick()
+            handleRadioClick(selectedQuestion.answerId)
         }
 
     },[selectedQuestion])
