@@ -31,25 +31,29 @@ const Questions = ({
 
     const [timer, setTimer] = useState(0);
     const timerKey = 'timerValue';
+    if(timer%5===0){
+        console.log("timer",timer)
+        selectedQuestion.timerVal=timer
+    }
 
     useEffect(() => {
         // Load the timer value from localStorage when the component mounts
         // const storedTimerValue = localStorage.getItem(timerKey);
-        const storedTimerValue = selectedQuestion?.timer ? selectedQuestion?.timer :  0;
-        console.log("selectedQuesiont",storedTimerValue)
+        const storedTimerValue = selectedQuestion?.timerVal ? selectedQuestion?.timerVal :  0;
+        console.log("timerStart",selectedQuestion)
        
         setTimer(parseInt(storedTimerValue));
         
+       
     
         // Start the timer interval
-        const interval = setInterval(() => {
+        let intervalId = setInterval(() => {
           setTimer((prevTimer) => prevTimer + 1);
         }, 1000);
     
         // Save the timer value in localStorage when the component unmounts
         return () => {
-          clearInterval(interval);
-          selectedQuestion.timer=timer
+          clearInterval(intervalId);
         //   localStorage.setItem(timerKey, timer.toString());
         };
       }, [selectedQuestion]);
