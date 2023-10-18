@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 
@@ -93,7 +94,8 @@ const Questions = ({
             </div>
             <div>
                 {bigScreenView && <p className="text-sm">Time</p>}
-                <div className="flex text-sm gap-0.5">
+                <div className="flex text-sm gap-0.5 items-center">
+                    {!bigScreenView && <AccessTimeIcon sx={{height:"20px"}}/>}
                 <Countdown
                     date={Date.now() + 1000000}
                 />
