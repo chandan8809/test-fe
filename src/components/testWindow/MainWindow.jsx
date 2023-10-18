@@ -25,7 +25,7 @@ const MainWindow = () => {
   return (
     <div>
         {bigScreenView && <Header expiryTimestamp={time}/>}
-        {!bigScreenView && <MobileHeader toggleDrawer={toggleDrawer}/>}
+        {!bigScreenView && <MobileHeader expiryTimestamp={time} toggleDrawer={toggleDrawer}/>}
         <Section bigScreenView={bigScreenView} state={state} toggleDrawer={toggleDrawer}/>
     </div>
   )

@@ -4,15 +4,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import testAppImage from "./../../assets/testAppLogo.png"
 import { Stack } from '@mui/material';
-import Countdown from 'react-countdown';
 import { useTimer } from 'react-timer-hook';
+import { formatTime } from '../helper/MinTwoDigit';
 
 
 
 function Header({ expiryTimestamp }) {
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + 600);
-
   const {
     totalSeconds,
     seconds,
@@ -91,7 +88,7 @@ function Header({ expiryTimestamp }) {
             {"Time Left"}
             </Typography>
             <div style={{fontSize: '15px'}} className='font-medium'>
-            <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+            <span>{ formatTime(hours) }</span>:<span>{ formatTime(minutes)}</span>:<span>{formatTime(seconds)}</span>
             </div>
         </div>
        </Stack>

@@ -1,11 +1,23 @@
 import React from 'react'
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import SegmentIcon from '@mui/icons-material/Segment';
-
-import Countdown from 'react-countdown';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
+import { useTimer } from 'react-timer-hook';
+import { formatTime } from '../helper/MinTwoDigit';
 
-const MobileHeader = ({toggleDrawer}) => {
+const MobileHeader = ({toggleDrawer,expiryTimestamp}) => {
+    const {
+        totalSeconds,
+        seconds,
+        minutes,
+        hours,
+        days,
+        isRunning,
+        start,
+        pause,
+        resume,
+        restart,
+      } = useTimer({ expiryTimestamp, onExpire: () => console.warn('onExpire called') });
     const [isFullScreen, setIsFullScreen] = React.useState(false);
 
     const toggleFullScreen = () => {
@@ -42,7 +54,9 @@ const MobileHeader = ({toggleDrawer}) => {
             <PauseCircleOutlineIcon  sx={{color:"white", height:"30px", width:"30px"}}/>
 
             <div className='text-white'>
-                <Countdown date={Date.now() + 1000000}  className='font-semibold'/>
+                <div style={{fontSize: '15px'}} className='font-semibold'>
+                <span>{formatTime(hours) }</span>:<span>{formatTime( minutes)}</span>:<span>{ formatTime(seconds)}</span>
+                </div>
                 <p>RRb group D exam</p>
             </div>
         </div>

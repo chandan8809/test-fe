@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useStopwatch } from 'react-timer-hook';
+import { formatTime } from '../helper/MinTwoDigit';
 
 
 const Questions = ({
@@ -27,8 +28,43 @@ const Questions = ({
       } = useStopwatch({ autoStart: true });
 
     const [selectedOption, setSelectedOption] = useState(null);
-    
 
+    const [timer, setTimer] = useState(0);
+    const timerKey = 'timerValue';
+
+    useEffect(() => {
+        // Load the timer value from localStorage when the component mounts
+        // const storedTimerValue = localStorage.getItem(timerKey);
+        const storedTimerValue = selectedQuestion?.timer ? selectedQuestion?.timer :  0;
+        console.log("selectedQuesiont",storedTimerValue)
+       
+        setTimer(parseInt(storedTimerValue));
+        
+    
+        // Start the timer interval
+        const interval = setInterval(() => {
+          setTimer((prevTimer) => prevTimer + 1);
+        }, 1000);
+    
+        // Save the timer value in localStorage when the component unmounts
+        return () => {
+          clearInterval(interval);
+          selectedQuestion.timer=timer
+        //   localStorage.setItem(timerKey, timer.toString());
+        };
+      }, [selectedQuestion]);
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${padWithZero(minutes)}:${padWithZero(remainingSeconds)}`;
+      }
+      
+      function padWithZero(number) {
+        return number.toString().padStart(2, '0');
+      }
+      
+    
     const handleRadioClick = (option) => {
         if (selectedOption === option) {
             // If the clicked option is already selected, clear the selection
@@ -103,7 +139,8 @@ const Questions = ({
                 <div className="flex text-sm gap-0.5 items-center">
                     {!bigScreenView && <AccessTimeIcon sx={{height:"20px"}}/>}
                     <div style={{fontSize: '15px'}}>
-                     <span>{minutes}</span>:<span>{seconds}</span>
+                     {/* <span>{formatTime(minutes)}</span>:<span>{formatTime(seconds) }</span> */}
+                     <span>{formatTime(timer)}</span>
                     </div>
                 </div>
             </div>
