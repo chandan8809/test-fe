@@ -17,7 +17,11 @@ const Questions = ({
     setSelectedSection,
     selectedQuestion,
     setSelectedQuestion,
-    setLastQuestion
+    setLastQuestion,
+    selectedItem,
+    setSelectedItem,
+    containerRef,
+    scrollToItem
 }) => {
     const {
         seconds,
@@ -35,6 +39,8 @@ const Questions = ({
         console.log("timer",timer)
         selectedQuestion.timerVal=timer
     }
+
+    console.log(",sdfkj",selectedItem)
 
     useEffect(() => {
         // Load the timer value from localStorage when the component mounts
@@ -90,13 +96,16 @@ const Questions = ({
         setOpen(false);
     };
 
-    const containerRef = useRef(null);
-    const [selectedItem, setSelectedItem] = useState(null);
-  
-    const scrollToItem = (itemIndex) => {
-      const item = containerRef.current.children[itemIndex];
-      item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-    };
+    
+
+    useEffect(()=>{
+        if(selectedQuestion.answerId){
+            handleRadioClick()
+        }
+
+    },[selectedQuestion])
+
+    console.log("sleec",selectedOption)
 
   return (
     <div className='flex-1'>
@@ -175,6 +184,7 @@ const Questions = ({
                             setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
+                                selectedQuestion.answerId=selectedOption
                                 setSelectedOption(null)
                             }
                             else{
@@ -185,6 +195,7 @@ const Questions = ({
                             console.log("hello",selectedQuestion)
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
+                                selectedQuestion.answerId=selectedOption
                                 setSelectedOption(null)
                             }
                             else{
@@ -213,6 +224,7 @@ const Questions = ({
                             setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
+                                selectedQuestion.answerId=selectedOption
                                 setSelectedOption(null)
                             }
                             else{
@@ -223,6 +235,7 @@ const Questions = ({
                             console.log("hello",selectedQuestion)
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
+                                selectedQuestion.answerId=selectedOption
                                 setSelectedOption(null)
                             }
                             else{

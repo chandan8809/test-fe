@@ -16,6 +16,15 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
     const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
     const previousQuestionRef = useRef(null);
     const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const containerRef = useRef(null);
+  
+  
+    const scrollToItem = (itemIndex) => {
+      const item = containerRef.current.children[itemIndex];
+      item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    };
 
     
   return (
@@ -23,6 +32,7 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
         <DrawerPallet  
           bigScreenView={true}
           showPallet={showPallet} 
+          setSelectedSection={setSelectedSection}
           selectedSection={selectedSection} 
           setSelectedQuestion={setSelectedQuestion}
           selectedQuestion={selectedQuestion}
@@ -30,6 +40,11 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
           lastQuestion={lastQuestionFlag}
           state={state}
           toggleDrawer={toggleDrawer}
+          questionData={questionData}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          scrollToItem={scrollToItem}
+         
           />
 
          {bigScreenView &&<section className={`absolute top-[calc(50vh-60px)] ${showPallet ? "right-[300px]" :"right-[0px]"}`}>
@@ -50,16 +65,25 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
           setSelectedQuestion={setSelectedQuestion}
           previousQuestionRef={previousQuestionRef}
           setLastQuestion={setLastQuestionFlag}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          containerRef={containerRef}
+          scrollToItem={scrollToItem}
          
           />
         <QuestionPallet 
           bigScreenView={bigScreenView}
           showPallet={showPallet} 
+          setSelectedSection={setSelectedSection}
           selectedSection={selectedSection} 
           setSelectedQuestion={setSelectedQuestion}
           selectedQuestion={selectedQuestion}
           previousQuestionRef={previousQuestionRef}
           lastQuestion={lastQuestionFlag}
+          questionData={questionData}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          scrollToItem={scrollToItem}
           />
     </div>
 

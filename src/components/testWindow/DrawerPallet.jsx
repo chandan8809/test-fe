@@ -13,6 +13,11 @@ export default function DrawerPallet({
     bigScreenView,
     state,
     toggleDrawer,
+    questionData,
+    selectedItem,
+    setSelectedItem,
+    setSelectedSection,
+    scrollToItem
 }) {
   
   
@@ -29,12 +34,17 @@ export default function DrawerPallet({
            <QuestionPallet
             bigScreenView={bigScreenView}
             showPallet={showPallet} 
+            setSelectedSection={setSelectedSection}
             selectedSection={selectedSection} 
             setSelectedQuestion={setSelectedQuestion}
             selectedQuestion={selectedQuestion}
             previousQuestionRef={previousQuestionRef}
             lastQuestion={lastQuestion}
             dialog={"true"}
+            questionData={questionData}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            scrollToItem={scrollToItem}
             />
           </Drawer>
         </React.Fragment>
