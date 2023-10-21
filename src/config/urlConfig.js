@@ -1,4 +1,4 @@
-const BASE_URL="http://localhost:5000/api/v1"
+const BASE_URL="https://real-gold-chameleon-wrap.cyclic.app"
 
 export const LOGIN_URL=`${BASE_URL}/auth/login`
 
