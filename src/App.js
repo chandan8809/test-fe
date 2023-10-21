@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import NotFound from './components/notFound/NotFound';
 import SignIn from './components/auth/Signin';
 import SignUp from './components/auth/Signup';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ResponsiveDrawer from './components/dashboard/MainContainer';
 
 function App() {
 
@@ -12,6 +15,18 @@ function App() {
   return (
     <div className="App">
       <CssBaseline />
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        />
      
       <BrowserRouter>
       {/* <div>
@@ -29,10 +44,12 @@ function App() {
         </Link>
       </div> */}
       <Routes>
-        <Route path="/" element={ <MainWindow/>} />
+        <Route path="/test" element={ <MainWindow/>} />
         <Route path="/signin" element={ <SignIn/>} />
         <Route path="/signup" element={ <SignUp/>} />
+        <Route path="/dashboard" element={ <ResponsiveDrawer/>} />
         <Route path="/404" element={<NotFound/>} />
+
         {/* <Route path="/apple">
           <Route path="/" element={<ApplePage />} />
           <Route path="*" element={<Navigate replace to="/apple" />} />

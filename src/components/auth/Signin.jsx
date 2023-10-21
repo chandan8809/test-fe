@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { authServiceObj } from '../../services/authServices';
+import { useNavigate } from "react-router-dom";
+import { notify } from '../Notify';
 
 function Copyright(props) {
   return (
@@ -31,14 +34,30 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const navigate=useNavigate()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const body={
       email: data.get('email'),
       password: data.get('password'),
-    });
+    }
+   
+
+    signin(body)
   };
+
+  const signin= async(body)=>{
+    const response= await authServiceObj.login(body)
+    if(response.data){
+        const data=response.data
+        localStorage.setItem("userData", JSON.stringify(data))
+        navigate("/dashboard")
+    }
+    else{
+      notify("error","Please provide valid credential")
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -87,7 +106,8 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2}}
+            
             >
               Sign In
             </Button>
