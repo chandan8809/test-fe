@@ -11,7 +11,7 @@ const NotFound = () => {
             animationData={animationData}
             loop={false}
             play
-            style={{ width:"100%", height: "100vh" }}
+            style={{ width:"100%", height: "100dvh" }}
         />
     </Link>
     </div>
