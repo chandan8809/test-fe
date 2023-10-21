@@ -21,7 +21,7 @@ const Questions = ({
     selectedItem,
     setSelectedItem,
     containerRef,
-    scrollToItem
+    scrollToItem,
 }) => {
     const {
         seconds,
@@ -99,6 +99,7 @@ const Questions = ({
     
 
     useEffect(()=>{
+        setSelectedOption(null)
         if(selectedQuestion.answerId){
             handleRadioClick(selectedQuestion.answerId)
         }
@@ -185,7 +186,6 @@ const Questions = ({
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
-                                setSelectedOption(null)
                             }
                             else{
                                 selectedQuestion.status="marked"
@@ -196,7 +196,7 @@ const Questions = ({
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
-                                setSelectedOption(null)
+                               
                             }
                             else{
                                 selectedQuestion.status="marked"
@@ -225,7 +225,6 @@ const Questions = ({
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
-                                setSelectedOption(null)
                             }
                             else{
                                 selectedQuestion.status="notAnswered"
@@ -236,7 +235,7 @@ const Questions = ({
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
-                                setSelectedOption(null)
+                               
                             }
                             else{
                                 selectedQuestion.status="notAnswered"
@@ -261,12 +260,10 @@ const Questions = ({
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-            {" Last Question"}
-            </DialogTitle>
+          
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
-               You moved to the last Question, Do you want to move to first Question ?
+               You have reached the last question of the section. Do you want to go to the first Question ?
             </DialogContentText>
             </DialogContent>
             <DialogActions>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Avatar from '@mui/material/Avatar';
 import { lightBlue ,green } from '@mui/material/colors';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
@@ -38,6 +38,38 @@ const QuestionPallet = ({
 }) => {
     console.log("lastQuesiton",lastQuestion,bigScreenView)
 
+    const statesCountFun=useCallback(()=>{
+        const questionLists = questionData.map(item => item.questionList).flat()
+        let count={
+            notVisited:0,
+            answerd:0,
+            marked:0,
+            markedAndAnswered:0,
+            notAnswered:0
+        }
+        questionLists.forEach(each=>{
+            if(!each.status){
+              count.notVisited++
+            }
+           else if(each.status==="answerd"){
+             count.answerd++
+           }
+           else if(each.status==="marked"){
+             count.marked++
+           }
+           else if(each.status==="markedAndAnswered"){
+             count.markedAndAnswered++
+           }  
+           else if(each.status==="notAnswered"){
+             count.notAnswered++
+           }  
+
+        })
+        return count
+    },[selectedQuestion])
+
+    const count=statesCountFun()
+
     if(dialog){
         return (
           <>
@@ -57,19 +89,19 @@ const QuestionPallet = ({
                   <div className='flex items-center justify-between'>
                       <div className='flex items-center gap-0.5'>
                           <div className='border h-6 w-6 flex justify-center items-center text-xs font-bold rounded-t-full bg-green-600  text-white '>
-                              0
+                              {count.answerd}
                           </div>
                           <p className='text-xs '>Answered</p>
                       </div>
                       <div className='flex items-center gap-0.5'>
                           <div className='border h-6 w-6 flex justify-center items-center text-xs font-bold rounded-full bg-purple-600  text-white '>
-                              0
+                              {count.marked}
                           </div>
                           <p className='text-xs'>Marked</p>
                       </div>
                       <div className='flex items-center gap-0.5'>
                           <div className='border border-black h-6 w-6  bg-white flex justify-center items-center text-xs font-bold'>
-                              0
+                              {count.notVisited}
                           </div>
                           <p className='text-xs '>Not Visited</p>
                       </div>
@@ -83,7 +115,7 @@ const QuestionPallet = ({
                           < CheckRoundedIcon sx={{color: green[700],height:"15px",width:"15px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
                           </div>
                           <div className='border h-6 w-6 flex justify-center text-xs font-bold items-center rounded-full bg-purple-600  text-white '>
-                              10
+                              {count.markedAndAnswered}
                           </div>
                       
                          
@@ -91,7 +123,7 @@ const QuestionPallet = ({
                       </div>
                       <div className='flex items-center gap-0.5'>
                           <div className='border h-6 w-6 flex justify-center text-xs font-bold items-center rounded-b-full bg-red-700  text-white '>
-                              0
+                              {count.notAnswered}
                           </div>
                           <p className='text-xs '>Not Answered</p>
                       </div>
@@ -207,19 +239,19 @@ const QuestionPallet = ({
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center gap-0.5'>
                             <div className='border h-6 w-6 flex justify-center items-center text-xs font-bold rounded-t-full bg-green-600  text-white '>
-                                0
+                             {count.answerd}
                             </div>
                             <p className='text-xs '>Answered</p>
                         </div>
                         <div className='flex items-center gap-0.5'>
                             <div className='border h-6 w-6 flex justify-center items-center text-xs font-bold rounded-full bg-purple-600  text-white '>
-                                0
+                                {count.marked}
                             </div>
                             <p className='text-xs'>Marked</p>
                         </div>
                         <div className='flex items-center gap-0.5'>
                             <div className='border border-black h-6 w-6  bg-white flex justify-center items-center text-xs font-bold'>
-                                0
+                            {count.notVisited}
                             </div>
                             <p className='text-xs '>Not Visited</p>
                         </div>
@@ -233,7 +265,7 @@ const QuestionPallet = ({
                             < CheckRoundedIcon sx={{color: green[700],height:"15px",width:"15px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
                             </div>
                             <div className='border h-6 w-6 flex justify-center text-xs font-bold items-center rounded-full bg-purple-600  text-white '>
-                                10
+                                {count.markedAndAnswered}
                             </div>
                         
                            
@@ -241,7 +273,7 @@ const QuestionPallet = ({
                         </div>
                         <div className='flex items-center gap-0.5'>
                             <div className='border h-6 w-6 flex justify-center text-xs font-bold items-center rounded-b-full bg-red-700  text-white '>
-                                0
+                                {count.notAnswered}
                             </div>
                             <p className='text-xs '>Not Answered</p>
                         </div>

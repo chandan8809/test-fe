@@ -68,7 +68,7 @@ function Header({ expiryTimestamp }) {
             align="center"
             noWrap
             >
-             {"junior Executive (common cred) Full Mock Test"}
+             {"Junior Executive (common cred) Full Mock Test"}
             </Typography>
         </Stack>
 
@@ -88,7 +88,7 @@ function Header({ expiryTimestamp }) {
             {"Time Left"}
             </Typography>
             <div style={{fontSize: '15px'}} className='font-medium'>
-            <span>{ formatTime(hours) }</span>:<span>{ formatTime(minutes)}</span>:<span>{formatTime(seconds)}</span>
+            <span className='bg-gray-500 px-1 py-0.5 text-white text-sm rounded-sm'>{ formatTime(hours) }</span> : <span className='bg-gray-500 px-1 py-0.5 text-white text-sm rounded-sm'>{ formatTime(minutes)}</span> : <span className='bg-gray-500 px-1 py-0.5 text-white text-sm rounded-sm'>{formatTime(seconds)}</span>
             </div>
         </div>
        </Stack>
