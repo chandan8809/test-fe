@@ -1,10 +1,10 @@
 import React, { useState, createContext, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { setCommonAuthorizationToken } from '../utils/axiosUtility';
 import { authServiceObj } from '../services/authServices';
 
 const AuthContext = createContext(null);
-const localStorageKey = 'user';
+const localStorageKey = 'userData';
 
 export const setSessionUserData = (userData) => {
   localStorage.setItem(localStorageKey, JSON.stringify(userData));
@@ -22,11 +22,12 @@ export const logout = () => {
 export const AuthProvider = ({ children }) => {
   const [authed, setAuthed] = useState(false);
   const [userData, setUserData] = useState(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   React.useEffect(() => {
     const sessionUserData = getSessionUserData();
+
     if (sessionUserData) {
       setUserData(() => sessionUserData);
       setAuthed(() => true);
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }) => {
     setAuthed(false);
     localStorage.removeItem(localStorageKey);
     setUserData(null);
-    navigate("'/login'")
+    // navigate("'/login'")
   };
 
  

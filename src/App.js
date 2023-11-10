@@ -8,12 +8,17 @@ import SignUp from './components/auth/Signup';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResponsiveDrawer from './components/dashboard/MainContainer';
+import LoadingPage from './components/loadingPage/LoadingPage';
+import { initializeAxios } from './utils/axiosUtility';
+import { AuthProvider } from './contexts/UserContext';
+
+
+initializeAxios()
 
 function App() {
-
-
   return (
     <div className="App">
+    
       <CssBaseline />
       <ToastContainer
         position="bottom-left"
@@ -44,9 +49,10 @@ function App() {
         </Link>
       </div> */}
       <Routes>
-        <Route path="/test" element={ <MainWindow/>} />
-        <Route path="/signin" element={ <SignIn/>} />
-        <Route path="/signup" element={ <SignUp/>} />
+        <Route path="/" element={ <LoadingPage/>} />
+        <Route path="/test/:exam_id" element={ <MainWindow/>} />
+        <Route path="/login" element={ <SignIn/>} />
+        <Route path="/register" element={ <SignUp/>} />
         <Route path="/dashboard" element={ <ResponsiveDrawer/>} />
         <Route path="/404" element={<NotFound/>} />
 
@@ -57,6 +63,7 @@ function App() {
         <Route path="*" element={<Navigate replace to="/404" />} />
       </Routes>
     </BrowserRouter>
+   
     </div>
   );
 }

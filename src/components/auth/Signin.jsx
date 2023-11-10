@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -15,6 +14,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { authServiceObj } from '../../services/authServices';
 import { useNavigate } from "react-router-dom";
 import { notify } from '../Notify';
+import { LoadingButton } from '@mui/lab';
+import { setCommonAuthorizationToken } from '../../utils/axiosUtility';
+import { useAuth } from '../../contexts/UserContext';
 
 function Copyright(props) {
   return (
@@ -34,6 +36,9 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const {setUserData}=useAuth()
+  const [loading,setLoading]=React.useState(false)
+
   const navigate=useNavigate()
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -42,21 +47,23 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     }
-   
-
     signin(body)
   };
 
   const signin= async(body)=>{
+    setLoading(true)
     const response= await authServiceObj.login(body)
     if(response.data){
         const data=response.data
         localStorage.setItem("userData", JSON.stringify(data))
+        setCommonAuthorizationToken(data.token);
+        setUserData(data)
         navigate("/dashboard")
     }
     else{
       notify("error","Please provide valid credential")
     }
+    setLoading(false)
   }
 
   return (
@@ -102,15 +109,19 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
+            <LoadingButton
+              loading={loading}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2}}
+              loadingPosition="start"
             
             >
-              Sign In
-            </Button>
+              Login
+            </LoadingButton>
+
+           
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -118,7 +129,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

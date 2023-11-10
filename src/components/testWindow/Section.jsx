@@ -3,17 +3,17 @@ import Questions from './Questions';
 import QuestionPallet from './QuestionPallet';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
-import questionData from './../../data/questions.json'
+// import questionData from './../../data/questions.json'
 import DrawerPallet from './DrawerPallet';
 
 
 
 
 
-const Section = ({bigScreenView,state,toggleDrawer}) => {
+const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
     const [showPallet,setShowPallet]=useState(true)
     const [selectedSection, setSelectedSection]=useState(questionData[0])
-    const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
+    const [selectedQuestion,setSelectedQuestion]=useState(questionData[0]?.question_list[0])
     const previousQuestionRef = useRef(null);
     const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
     const [selectedItem, setSelectedItem] = useState(null);
@@ -26,6 +26,7 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
       item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     };
 
+ 
     
   return (
     <div className='flex h-[calc(100dvh-65px)] relative'>
@@ -57,7 +58,7 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
         </section>}
 
         <Questions 
-        bigScreenView={bigScreenView}
+          bigScreenView={bigScreenView}
           questionData={questionData} 
           selectedSection={selectedSection} 
           setSelectedSection={setSelectedSection}

@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useStopwatch } from 'react-timer-hook';
-import { formatTime } from '../helper/MinTwoDigit';
+
 
 
 const Questions = ({
@@ -23,30 +21,20 @@ const Questions = ({
     containerRef,
     scrollToItem,
 }) => {
-    const {
-        seconds,
-        minutes,
-        start,
-        pause,
-        reset,
-      } = useStopwatch({ autoStart: true });
-
+   
     const [selectedOption, setSelectedOption] = useState(null);
 
     const [timer, setTimer] = useState(0);
-    const timerKey = 'timerValue';
     if(timer%5===0){
-        console.log("timer",timer)
         selectedQuestion.timerVal=timer
     }
 
-    console.log(",sdfkj",selectedItem)
+    
 
     useEffect(() => {
         // Load the timer value from localStorage when the component mounts
         // const storedTimerValue = localStorage.getItem(timerKey);
         const storedTimerValue = selectedQuestion?.timerVal ? selectedQuestion?.timerVal :  0;
-        console.log("timerStart",selectedQuestion)
        
         setTimer(parseInt(storedTimerValue));
         
@@ -106,7 +94,14 @@ const Questions = ({
 
     },[selectedQuestion])
 
-    console.log("sleec",selectedOption)
+    let originalOptions=selectedQuestion.options
+
+    const convertedOptions = Object.keys(originalOptions).map(key => {
+        return {
+            id: parseInt(key),
+            value: originalOptions[key]
+        };
+    });
 
   return (
     <div className='flex-1'>
@@ -117,15 +112,16 @@ const Questions = ({
             </div>}
             {questionData.map((each,index)=>(
               <div 
-               className={`scrollable-item ${selectedItem === index ? "selected" : ""} py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
+               key={each._id}
+               className={`scrollable-item capitalize ${selectedItem === index ? "selected" : ""} py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.section_name===each.section_name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
                onClick={()=>{
                 setSelectedSection(each)
-                setSelectedQuestion(each.questionList[0])
+                setSelectedQuestion(each.question_list[0])
                 setSelectedItem(index)
                 scrollToItem(index)
                }}
                >
-                {each.name}
+                {each.section_name}
               </div>
             ))}
         </div>
@@ -165,8 +161,8 @@ const Questions = ({
             <div className='Question '>{selectedQuestion.question}</div>
             <div className='Answer py-4'>
                 <div>
-                    {selectedQuestion.options.map((each,idx)=>(
-                        <div className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.value)}>
+                    {convertedOptions.map((each,idx)=>(
+                        <div key={each._id} className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.value)}>
                             <input type="radio" name="radioOption" value={each.value} checked={selectedOption === each.value} />
                             <label for="html" className='ml-2'>{each.value}</label>
                         </div>
@@ -181,9 +177,10 @@ const Questions = ({
                     <div 
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      onClick={()=>{
-                        if(selectedQuestion.id < selectedSection?.questionList.length){
-                            setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
+                        if(selectedQuestion.id < selectedSection?.question_list.length){
+                            setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
                             if(selectedOption){
+                                console.log("selected",selectedOption)
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
                             }
@@ -191,8 +188,7 @@ const Questions = ({
                                 selectedQuestion.status="marked"
                             }
                         }
-                        if(selectedQuestion.id === selectedSection?.questionList.length){
-                            console.log("hello",selectedQuestion)
+                        if(selectedQuestion.id === selectedSection?.question_list.length){
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
@@ -208,21 +204,22 @@ const Questions = ({
                     {bigScreenView ?"Mark for Review & Next":"Mark & Next"}
                     </div>
 
+
                     <div 
                      onClick={()=>setSelectedOption(null)}
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      >
                     {bigScreenView ?"Clear Response":"Clear"}
-                     
                     </div>
 
+
                     <div 
-                     
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      onClick={()=>{
-                        if(selectedQuestion.id < selectedSection?.questionList.length){
-                            setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
+                        if(selectedQuestion.id < selectedSection?.question_list.length){
+                            setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
                             if(selectedOption){
+                                console.log("sele",selectedQuestion)
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
                             }
@@ -230,8 +227,7 @@ const Questions = ({
                                 selectedQuestion.status="notAnswered"
                             }
                         }
-                        if(selectedQuestion.id === selectedSection?.questionList.length){
-                            console.log("hello",selectedQuestion)
+                        if(selectedQuestion.id === selectedSection?.question_list.length){
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
@@ -269,7 +265,7 @@ const Questions = ({
             <DialogActions>
             <Button onClick={handleClose}>No</Button>
             <Button onClick={()=>{
-                setSelectedQuestion(selectedSection.questionList[0])
+                setSelectedQuestion(selectedSection.question_list[0])
                 handleClose()
                 }} 
                 autoFocus>

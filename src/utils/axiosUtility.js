@@ -13,14 +13,14 @@ export const setDefaultAxiosHeaders = () => {
 
 //Set auth token to axios default header if user present in local storage
 export const setAxiosDefaultTokenFromLocalStorage = () => {
-    const userData = JSON.parse(localStorage.getItem('user')??'{}');
+    const userData = JSON.parse(localStorage.getItem('userData')??'{}');
     if(userData?.token){
         setCommonAuthorizationToken(userData?.token);
     }
 }
 
 export const setCommonAuthorizationToken = (token) => {
-    axios.defaults.headers.common['Authorization'] = `token ${token}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
 

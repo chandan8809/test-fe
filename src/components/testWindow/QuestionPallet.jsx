@@ -4,6 +4,14 @@ import { lightBlue ,green } from '@mui/material/colors';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useAuth } from '../../contexts/UserContext';
+
 
 const questionStatus={
     "answerd":"rounded-t-full bg-green-600  text-white",
@@ -36,10 +44,19 @@ const QuestionPallet = ({
     setSelectedSection,
     scrollToItem
 }) => {
-    console.log("lastQuesiton",lastQuestion,bigScreenView)
+    const { userData } = useAuth()
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
     const statesCountFun=useCallback(()=>{
-        const questionLists = questionData.map(item => item.questionList).flat()
+        const questionLists = questionData.map(item => item.question_list).flat()
         let count={
             notVisited:0,
             answerd:0,
@@ -70,6 +87,16 @@ const QuestionPallet = ({
 
     const count=statesCountFun()
 
+    // let originalOptions=selectedQuestion.options
+
+    // const convertedOptions = Object.keys(originalOptions).map(key => {
+    //     return {
+    //         id: parseInt(key),
+    //         value: originalOptions[key]
+    //     };
+    // });
+
+
     if(dialog){
         return (
           <>
@@ -80,7 +107,7 @@ const QuestionPallet = ({
                       <Avatar sx={{ bgcolor: lightBlue[500],height:"30px",width:"30px" }} >
                           < PersonRoundedIcon />
                       </Avatar>
-                      <p>Chandna Kumar</p>
+                      {/* <p>{userData}</p> */}
                       
                   </div>
               </section>
@@ -131,19 +158,19 @@ const QuestionPallet = ({
               </section>
              
              {questionData.map((section,idx)=>(
-                <div>
+                <div key={section._id}>
                     <section className='section pt-8'>
                         <div className='flex bg-sky-200 px-2 py-0.5 text-md'>
                             <div className=' text-md font-medium' >
                                 <p>SECTION : </p>
                             </div>
-                            <div>
-                            &nbsp;{section?.name}
+                            <div className='capitalize'>
+                            &nbsp;{section?.section_name}
                             </div>
                         </div>
             
                         <div className={`flex flex-wrap gap-3 p-4 overflow-scroll `}>
-                            {section.questionList.map((each)=>{
+                            {section.question_list.map((each)=>{
                                 // const targetQuestion=selectedSection.questionList.find((ques)=>ques._id===selectedQuestion._id)
                                 // selectedQuestion.status="notVisited"
                                 // if( targetQuestion){
@@ -152,6 +179,7 @@ const QuestionPallet = ({
                                 
                                 return(
                                     <div 
+                                    key={each._id}
                                     className={`
                                         relative h-7 w-10  flex justify-center items-center font-medium cursor-pointer  
                                         ${(each.status && each._id===selectedQuestion._id) 
@@ -171,7 +199,6 @@ const QuestionPallet = ({
                                     onClick={()=>{
                                         previousQuestionRef.current = selectedQuestion
                                         if(!previousQuestionRef.current.status){
-                                            console.log("helo",previousQuestionRef.current.status)
                                             previousQuestionRef.current.status = "notAnswered"
                                         }
                                         setSelectedQuestion(each)
@@ -218,7 +245,7 @@ const QuestionPallet = ({
         )
     }
 
-
+    
 
     if(!dialog){
         return (
@@ -230,7 +257,7 @@ const QuestionPallet = ({
                         <Avatar sx={{ bgcolor: lightBlue[500],height:"30px",width:"30px" }} >
                             < PersonRoundedIcon />
                         </Avatar>
-                        <p>Chandna Kumar</p>
+                        <p className='capitalize'>{userData.user.name}</p>
                         
                     </div>
                 </section>
@@ -285,13 +312,13 @@ const QuestionPallet = ({
                         <div className=' text-md font-medium' >
                             <p>SECTION : </p>
                         </div>
-                        <div>
-                         &nbsp;{selectedSection?.name}
+                        <div className='capitalize'>
+                         &nbsp;{selectedSection?.section_name}
                         </div>
                     </div>
         
                    <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
-                        {selectedSection.questionList.map((each)=>{
+                        {selectedSection.question_list.map((each)=>{
                             // const targetQuestion=selectedSection.questionList.find((ques)=>ques._id===selectedQuestion._id)
                             // selectedQuestion.status="notVisited"
                             // if( targetQuestion){
@@ -300,6 +327,7 @@ const QuestionPallet = ({
                             
                             return(
                                 <div 
+                                 key={each._id}
                                  className={`
                                   relative h-7 w-10  flex justify-center items-center font-medium cursor-pointer  
                                   ${(each.status && each._id===selectedQuestion._id) 
@@ -319,7 +347,6 @@ const QuestionPallet = ({
                                  onClick={()=>{
                                     previousQuestionRef.current = selectedQuestion
                                     if(!previousQuestionRef.current.status){
-                                        console.log("helo",previousQuestionRef.current.status)
                                         previousQuestionRef.current.status = "notAnswered"
                                     }
                                     setSelectedQuestion(each)
@@ -346,7 +373,7 @@ const QuestionPallet = ({
                             </div>
                         </div>
                        <div className='px-2'>
-                           <div className="p-1 rounded-sm bg-sky-700  text-center px-2 cursor-pointer text-white">
+                           <div onClick={handleClickOpen} className="p-1 rounded-sm bg-sky-700  text-center px-2 cursor-pointer text-white">
                              Submit Test
                             </div>
         
@@ -354,6 +381,65 @@ const QuestionPallet = ({
                     </div>
         
                 </section>
+                <div>
+                <Dialog  
+                    maxWidth={"lg"}
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title" style={{textAlign:"center"}}>
+                    {"Submit your test"}
+                    </DialogTitle>
+                    <DialogContent>
+
+                    <table>
+                    <tr className='bg-sky-500'>
+                        <th>Section</th>
+                        <th>No. of questions</th>
+                        <th>Answered</th>
+                        <th>Not Answered</th>
+                        <th>Marked for Review</th>
+                        <th>Not Visited</th>
+                    </tr>
+                    <tr>
+                        <td>General Knowledge</td>
+                        <td>10</td>
+                        <td>21</td>
+                        <td>23</td>
+                        <td>23</td>
+                        <td>45</td>
+                        
+                    </tr>
+                    <tr>
+                    <td>General Knowledge</td>
+                        <td>10</td>
+                        <td>21</td>
+                        <td>23</td>
+                        <td>23</td>
+                        <td>45</td>
+                    </tr>
+                    <tr>
+                    <td>General Knowledge</td>
+                        <td>10</td>
+                        <td>21</td>
+                        <td>23</td>
+                        <td>23</td>
+                        <td>45</td>
+                    </tr>
+                    
+                   
+                    </table>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose}>Close</Button>
+                    <Button onClick={handleClose} autoFocus>
+                        Submit
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+                </div>
         
             </div>}
             </>
