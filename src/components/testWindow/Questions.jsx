@@ -265,8 +265,20 @@ const Questions = ({
             <DialogActions>
             <Button onClick={handleClose}>No</Button>
             <Button onClick={()=>{
-                setSelectedQuestion(selectedSection.question_list[0])
-                handleClose()
+                if(selectedSection.id<questionData.length){
+                    setTimeout(()=>{
+                        setSelectedSection(questionData[selectedSection.id])
+                        setSelectedQuestion(questionData[selectedSection.id].question_list[0])
+                    },200)
+                    handleClose()
+                }
+                else{
+                    setTimeout(()=>{
+                        setSelectedSection(questionData[0])
+                        setSelectedQuestion(questionData[0].question_list[0])
+                    },200)
+                    handleClose()
+                }
                 }} 
                 autoFocus>
                 Yes
