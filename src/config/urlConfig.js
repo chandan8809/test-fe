@@ -8,5 +8,6 @@ export const SIGNUP_URL=`${BASE_URL}/api/v1/auth/register`
 //EXAM URL
 
 export const GET_ALL_EXAM=`${BASE_URL}/api/v1/exam`
+export const SUBMIT_EXAM=`${BASE_URL}/api/v1/exam/submit`
 
 

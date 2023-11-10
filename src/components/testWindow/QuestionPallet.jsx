@@ -11,7 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useAuth } from '../../contexts/UserContext';
-
+import { examServiceObj } from '../../services/examServices';
+import { useParams } from 'react-router-dom';
 
 const questionStatus={
     "answerd":"rounded-t-full bg-green-600  text-white",
@@ -42,11 +43,12 @@ const QuestionPallet = ({
     selectedItem,
     setSelectedItem,
     setSelectedSection,
-    scrollToItem
+    scrollToItem,
+    attemptedAnswer
 }) => {
     const { userData } = useAuth()
     const [open, setOpen] = React.useState(false);
-
+    let { exam_id } = useParams();
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -86,6 +88,17 @@ const QuestionPallet = ({
     },[selectedQuestion])
 
     const count=statesCountFun()
+
+    const submitTest=async()=>{
+        const response= await examServiceObj.submitTest({attempted:attemptedAnswer,quiz_id:exam_id})
+        if(response.data){
+            const data= response.data
+            console.log("da",data)
+        }
+        else{
+            console.log("error")
+        }
+    }
 
     // let originalOptions=selectedQuestion.options
 
@@ -434,7 +447,7 @@ const QuestionPallet = ({
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
-                    <Button onClick={handleClose} autoFocus>
+                    <Button onClick={submitTest} autoFocus>
                         Submit
                     </Button>
                     </DialogActions>
