@@ -20,6 +20,7 @@ const Questions = ({
     setSelectedItem,
     containerRef,
     scrollToItem,
+    attemptedAnswer
 }) => {
    
     const [selectedOption, setSelectedOption] = useState(null);
@@ -64,6 +65,7 @@ const Questions = ({
       
     
     const handleRadioClick = (option) => {
+        console.log("opt",option)
         if (selectedOption === option) {
             // If the clicked option is already selected, clear the selection
             setSelectedOption(null);
@@ -162,8 +164,8 @@ const Questions = ({
             <div className='Answer py-4'>
                 <div>
                     {convertedOptions.map((each,idx)=>(
-                        <div key={each._id} className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.value)}>
-                            <input type="radio" name="radioOption" value={each.value} checked={selectedOption === each.value} />
+                        <div key={each._id} className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.id)}>
+                            <input type="radio" name="radioOption" value={each.id} checked={selectedOption === each.id} />
                             <label for="html" className='ml-2'>{each.value}</label>
                         </div>
                     ))}

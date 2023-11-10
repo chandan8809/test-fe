@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Questions from './Questions';
 import QuestionPallet from './QuestionPallet';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -17,7 +17,8 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
     const previousQuestionRef = useRef(null);
     const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
     const [selectedItem, setSelectedItem] = useState(null);
-
+    const [attemptedAnswer,setAttemptedAnswer]=useState([])
+    const [questionStatus,setQuestionStatus]=useState({})
     const containerRef = useRef(null);
   
   
@@ -26,7 +27,19 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
       item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     };
 
+    useEffect(()=>{
+      const answerTemplate= [...questionData].map(each=>({section:each.section_name}))
+      setAttemptedAnswer(answerTemplate)
+
+      let Qstatus={}
+      questionData.forEach(each=>{
+        Qstatus[each.section_name]=each.question_list.map(each=>"notVisited")
+      })
+      setQuestionStatus(Qstatus)
+    },[])
  
+    console.log("ques",questionStatus)
+    console.log("att",attemptedAnswer)
     
   return (
     <div className='flex h-[calc(100dvh-65px)] relative'>
@@ -70,6 +83,7 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
           setSelectedItem={setSelectedItem}
           containerRef={containerRef}
           scrollToItem={scrollToItem}
+          attemptedAnswer={attemptedAnswer}
          
           />
         <QuestionPallet 
