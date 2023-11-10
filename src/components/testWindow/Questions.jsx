@@ -259,7 +259,7 @@ const Questions = ({
           
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
-               You have reached the last question of the section. Do you want to go to the first Question ?
+            {questionData.length===selectedSection.id ? "You have reached the last question of the section. Do you want to go to First Question ?":"Do you want to go to next section ?"}
             </DialogContentText>
             </DialogContent>
             <DialogActions>
