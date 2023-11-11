@@ -38,8 +38,6 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
       setQuestionStatus(Qstatus)
     },[])
  
-    console.log("ques",questionStatus)
-    console.log("att",attemptedAnswer)
     
   return (
     <div className='flex h-[calc(100dvh-65px)] relative'>
@@ -84,6 +82,7 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
           containerRef={containerRef}
           scrollToItem={scrollToItem}
           attemptedAnswer={attemptedAnswer}
+          setAttemptedAnswer={setAttemptedAnswer}
          
           />
         <QuestionPallet 
@@ -99,6 +98,8 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           scrollToItem={scrollToItem}
+          attemptedAnswer={attemptedAnswer}
+          questionStatusObj={questionStatus}
           />
     </div>
 

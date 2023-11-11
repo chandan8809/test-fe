@@ -1,14 +1,12 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import Avatar from '@mui/material/Avatar';
 import { lightBlue ,green } from '@mui/material/colors';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useAuth } from '../../contexts/UserContext';
 import { examServiceObj } from '../../services/examServices';
@@ -44,7 +42,8 @@ const QuestionPallet = ({
     setSelectedItem,
     setSelectedSection,
     scrollToItem,
-    attemptedAnswer
+    attemptedAnswer,
+    questionStatusObj
 }) => {
     const { userData } = useAuth()
     const [open, setOpen] = React.useState(false);
@@ -57,8 +56,9 @@ const QuestionPallet = ({
       setOpen(false);
     };
 
-    const statesCountFun=useCallback(()=>{
-        const questionLists = questionData.map(item => item.question_list).flat()
+    const statesCountFun=()=>{
+        const questionLists = questionStatusObj[selectedSection.section_name]
+        console.log("questionLists",questionLists)
         let count={
             notVisited:0,
             answerd:0,
@@ -66,26 +66,27 @@ const QuestionPallet = ({
             markedAndAnswered:0,
             notAnswered:0
         }
-        questionLists.forEach(each=>{
-            if(!each.status){
+        console.log("neh",questionLists)
+        questionLists?.forEach(each=>{
+            if(each==="notVisited"){
               count.notVisited++
             }
-           else if(each.status==="answerd"){
+           else if(each==="answerd"){
              count.answerd++
            }
-           else if(each.status==="marked"){
+           else if(each==="marked"){
              count.marked++
            }
-           else if(each.status==="markedAndAnswered"){
+           else if(each==="markedAndAnswered"){
              count.markedAndAnswered++
            }  
-           else if(each.status==="notAnswered"){
+           else if(each==="notAnswered"){
              count.notAnswered++
            }  
 
         })
         return count
-    },[selectedQuestion])
+    }
 
     const count=statesCountFun()
 
@@ -108,7 +109,34 @@ const QuestionPallet = ({
     //         value: originalOptions[key]
     //     };
     // });
+    const calculateTotals = (category) => {
+        const totalQuestion = questionStatusObj[category].length
+        const answered = questionStatusObj[category].filter((status) => status === 'answerd').length;
+        const notAnswerdCount = questionStatusObj[category].filter((status) => status === 'notAnswerd').length;
+        const marked = questionStatusObj[category].filter((status) => status === 'marked').length;
+        const markedAndAnswed = questionStatusObj[category].filter((status) => status === 'markedAndAnswered').length;
+        const notVisitedCount= questionStatusObj[category].filter((status) => status === 'notVisited').length;
+        const answeredCount=answered+markedAndAnswed
+        const markedCount=marked+markedAndAnswed
+        return { totalQuestion, answeredCount,notAnswerdCount,markedCount, notVisitedCount };
+    };
 
+    const renderTable=()=>{
+        return (
+             <>
+                {Object.keys(questionStatusObj).map((category) => (
+                    <tr key={category}>
+                    <td className='capitalize'>{category}</td>
+                    <td className='text-center'>{calculateTotals(category).totalQuestion}</td>
+                    <td className='text-center'>{calculateTotals(category).answeredCount}</td>
+                    <td className='text-center'>{calculateTotals(category).notAnswerdCount}</td>
+                    <td className='text-center'>{calculateTotals(category).markedCount}</td>
+                    <td className='text-center'>{calculateTotals(category).notVisitedCount}</td>
+                    </tr>
+                ))}
+             </>
+        );
+    }
 
     if(dialog){
         return (
@@ -416,33 +444,7 @@ const QuestionPallet = ({
                         <th>Marked for Review</th>
                         <th>Not Visited</th>
                     </tr>
-                    <tr>
-                        <td>General Knowledge</td>
-                        <td>10</td>
-                        <td>21</td>
-                        <td>23</td>
-                        <td>23</td>
-                        <td>45</td>
-                        
-                    </tr>
-                    <tr>
-                    <td>General Knowledge</td>
-                        <td>10</td>
-                        <td>21</td>
-                        <td>23</td>
-                        <td>23</td>
-                        <td>45</td>
-                    </tr>
-                    <tr>
-                    <td>General Knowledge</td>
-                        <td>10</td>
-                        <td>21</td>
-                        <td>23</td>
-                        <td>23</td>
-                        <td>45</td>
-                    </tr>
-                    
-                   
+                    {renderTable()}
                     </table>
                     </DialogContent>
                     <DialogActions>

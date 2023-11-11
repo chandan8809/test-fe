@@ -20,7 +20,9 @@ const Questions = ({
     setSelectedItem,
     containerRef,
     scrollToItem,
-    attemptedAnswer
+    attemptedAnswer,
+    setAttemptedAnswer
+    
 }) => {
    
     const [selectedOption, setSelectedOption] = useState(null);
@@ -30,6 +32,7 @@ const Questions = ({
         selectedQuestion.timerVal=timer
     }
 
+    console.log("att",attemptedAnswer)
     
 
     useEffect(() => {
@@ -164,7 +167,7 @@ const Questions = ({
             <div className='Answer py-4'>
                 <div>
                     {convertedOptions.map((each,idx)=>(
-                        <div key={each._id} className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.id)}>
+                        <div key={each._id} className=' hover:bg-gray-100 p-2 flex items-center' for="html" onClick={() => handleRadioClick(each.id)}>
                             <input type="radio" name="radioOption" value={each.id} checked={selectedOption === each.id} />
                             <label for="html" className='ml-2'>{each.value}</label>
                         </div>
@@ -185,6 +188,15 @@ const Questions = ({
                                 console.log("selected",selectedOption)
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                             }
                             else{
                                 selectedQuestion.status="marked"
@@ -194,6 +206,15 @@ const Questions = ({
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                                
                             }
                             else{
@@ -224,6 +245,15 @@ const Questions = ({
                                 console.log("sele",selectedQuestion)
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                             }
                             else{
                                 selectedQuestion.status="notAnswered"
@@ -233,6 +263,15 @@ const Questions = ({
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                                
                             }
                             else{
