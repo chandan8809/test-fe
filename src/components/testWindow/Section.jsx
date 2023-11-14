@@ -83,8 +83,10 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
           scrollToItem={scrollToItem}
           attemptedAnswer={attemptedAnswer}
           setAttemptedAnswer={setAttemptedAnswer}
-         
+          setQuestionStatus={setQuestionStatus}
+          questionStatus={questionStatus}
           />
+          
         <QuestionPallet 
           bigScreenView={bigScreenView}
           showPallet={showPallet} 

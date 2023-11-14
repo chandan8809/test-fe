@@ -55,10 +55,10 @@ const QuestionPallet = ({
     const handleClose = () => {
       setOpen(false);
     };
-
+   
     const statesCountFun=()=>{
         const questionLists = questionStatusObj[selectedSection.section_name]
-        console.log("questionLists",questionLists)
+
         let count={
             notVisited:0,
             answerd:0,
@@ -66,7 +66,7 @@ const QuestionPallet = ({
             markedAndAnswered:0,
             notAnswered:0
         }
-        console.log("neh",questionLists)
+      
         questionLists?.forEach(each=>{
             if(each==="notVisited"){
               count.notVisited++
@@ -94,7 +94,6 @@ const QuestionPallet = ({
         const response= await examServiceObj.submitTest({attempted:attemptedAnswer,quiz_id:exam_id})
         if(response.data){
             const data= response.data
-            console.log("da",data)
         }
         else{
             console.log("error")
@@ -138,6 +137,9 @@ const QuestionPallet = ({
         );
     }
 
+   
+
+
     if(dialog){
         return (
           <>
@@ -173,8 +175,6 @@ const QuestionPallet = ({
                           </div>
                           <p className='text-xs '>Not Visited</p>
                       </div>
-      
-                      
                   </div>
        
                   <div className='flex items-center justify-between pt-2'>
@@ -260,6 +260,7 @@ const QuestionPallet = ({
 
                 </div>
              ))}
+
       
               <section>
                   <div className=' border border-gray-300 py-4 px-2'>
@@ -360,12 +361,6 @@ const QuestionPallet = ({
         
                    <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
                         {selectedSection.question_list.map((each)=>{
-                            // const targetQuestion=selectedSection.questionList.find((ques)=>ques._id===selectedQuestion._id)
-                            // selectedQuestion.status="notVisited"
-                            // if( targetQuestion){
-                            //     targetQuestion.status="notVisited"
-                            // }
-                            
                             return(
                                 <div 
                                  key={each._id}
@@ -449,7 +444,7 @@ const QuestionPallet = ({
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
-                    <Button onClick={submitTest} autoFocus>
+                    <Button onClick={submitTest}>
                         Submit
                     </Button>
                     </DialogActions>

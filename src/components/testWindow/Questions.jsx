@@ -21,8 +21,9 @@ const Questions = ({
     containerRef,
     scrollToItem,
     attemptedAnswer,
-    setAttemptedAnswer
-    
+    setAttemptedAnswer,
+    setQuestionStatus,
+    questionStatus,
 }) => {
    
     const [selectedOption, setSelectedOption] = useState(null);
@@ -32,7 +33,6 @@ const Questions = ({
         selectedQuestion.timerVal=timer
     }
 
-    console.log("att",attemptedAnswer)
     
 
     useEffect(() => {
@@ -68,7 +68,6 @@ const Questions = ({
       
     
     const handleRadioClick = (option) => {
-        console.log("opt",option)
         if (selectedOption === option) {
             // If the clicked option is already selected, clear the selection
             setSelectedOption(null);
@@ -185,9 +184,20 @@ const Questions = ({
                         if(selectedQuestion.id < selectedSection?.question_list.length){
                             setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
                             if(selectedOption){
-                                console.log("selected",selectedOption)
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
+
+                               
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "markedAndAnswered";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
 
                                 setAttemptedAnswer(prevAttemptedAnswer => {
                                     return prevAttemptedAnswer.map(each => {
@@ -198,14 +208,37 @@ const Questions = ({
                                     });
                                 });
                             }
+
                             else{
                                 selectedQuestion.status="marked"
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "marked";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
                             }
                         }
                         if(selectedQuestion.id === selectedSection?.question_list.length){
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "markedAndAnswered";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
 
                                 setAttemptedAnswer(prevAttemptedAnswer => {
                                     return prevAttemptedAnswer.map(each => {
@@ -219,6 +252,17 @@ const Questions = ({
                             }
                             else{
                                 selectedQuestion.status="marked"
+                                 
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "marked";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
                             }
                             handleClickOpen()
                         }
@@ -242,9 +286,20 @@ const Questions = ({
                         if(selectedQuestion.id < selectedSection?.question_list.length){
                             setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
                             if(selectedOption){
-                                console.log("sele",selectedQuestion)
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
+                               
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "answerd";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
 
                                 setAttemptedAnswer(prevAttemptedAnswer => {
                                     return prevAttemptedAnswer.map(each => {
@@ -257,12 +312,34 @@ const Questions = ({
                             }
                             else{
                                 selectedQuestion.status="notAnswered"
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "notAnswered";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
+
                             }
                         }
                         if(selectedQuestion.id === selectedSection?.question_list.length){
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "answerd";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
 
                                 setAttemptedAnswer(prevAttemptedAnswer => {
                                     return prevAttemptedAnswer.map(each => {
@@ -276,6 +353,16 @@ const Questions = ({
                             }
                             else{
                                 selectedQuestion.status="notAnswered"
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return "notAnswered";
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
                             }
                             handleClickOpen()
                         }
@@ -321,7 +408,7 @@ const Questions = ({
                     handleClose()
                 }
                 }} 
-                autoFocus>
+                >
                 Yes
             </Button>
             </DialogActions>
