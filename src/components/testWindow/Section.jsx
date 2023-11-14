@@ -33,7 +33,9 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
 
       let Qstatus={}
       questionData.forEach(each=>{
-        Qstatus[each.section_name]=each.question_list.map(each=>"notVisited")
+        Qstatus[each.section_name]=each.question_list.map((each,idx)=>{
+          return {status:"notVisited", index:idx+1}
+        })
       })
       setQuestionStatus(Qstatus)
     },[])

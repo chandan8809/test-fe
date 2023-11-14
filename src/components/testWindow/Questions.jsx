@@ -107,6 +107,8 @@ const Questions = ({
         };
     });
 
+    console.log("qu",questionStatus)
+
   return (
     <div className='flex-1'>
 
@@ -192,7 +194,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "markedAndAnswered";
+                                        return {status:"markedAndAnswered",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -216,7 +218,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "marked";
+                                        return {status:"marked",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -233,7 +235,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "markedAndAnswered";
+                                        return {status:"markedAndAnswered",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -257,7 +259,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "marked";
+                                        return {status:"marked",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -294,7 +296,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "answerd";
+                                        return {status:"answerd",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -316,7 +318,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "notAnswered";
+                                        return {status:"notAnswered",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -334,7 +336,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "answerd";
+                                        return {status:"answerd",index:idx+1};
                                       }
                                       return stat;
                                     });
@@ -357,7 +359,7 @@ const Questions = ({
                                     const updatedStatus = { ...prevStatus };
                                     updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
                                       if (selectedQuestion.id === idx + 1) {
-                                        return "notAnswered";
+                                        return {status:"notAnswered",index:idx+1};
                                       }
                                       return stat;
                                     });
