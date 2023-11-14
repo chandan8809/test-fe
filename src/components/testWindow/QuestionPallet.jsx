@@ -210,40 +210,39 @@ const QuestionPallet = ({
                     </div>
         
                    <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
-                        {Object.entries(questionStatusObj)[selectedSection.id-1][1].map((each)=>{
+                        {selectedSection.question_list.map((each)=>{
                             return(
-                                // <div 
-                                //  key={each._id}
-                                //  className={`
-                                //   relative h-7 w-10  flex justify-center items-center font-medium cursor-pointer  
-                                //   ${(each.status && each._id===selectedQuestion._id) 
-                                //     ? 
-                                //     questionStatusSelected[each.status] 
-                                //     : 
-                                //     each.status 
-                                //     ?  
-                                //     questionStatus[each.status] 
-                                //     : 
-                                //     each._id===selectedQuestion._id
-                                //     ? 
-                                //     "border border-black bg-white text-black rounded-full"
-                                //     : 
-                                //     "border border-black bg-white"
-                                //   }`}
-                                //  onClick={()=>{
-                                //     previousQuestionRef.current = selectedQuestion
-                                //     if(!previousQuestionRef.current.status){
-                                //         previousQuestionRef.current.status = "notAnswered"
-                                //     }
-                                //     setSelectedQuestion(each)
-                                // }} 
-                                // >
-                                //     {each.status==="markedAndAnswered" && <div className='absolute top-[-10px] left-[22px]'>
-                                //     < CheckRoundedIcon sx={{color: green[700],height:"18px",width:"18px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
-                                //     </div>}
-                                //     {each.id}
-                                // </div>
-                                <div>hell</div>
+                                <div 
+                                 key={each._id}
+                                 className={`
+                                  relative h-7 w-10  flex justify-center items-center font-medium cursor-pointer  
+                                  ${(each.status && each._id===selectedQuestion._id) 
+                                    ? 
+                                    questionStatusSelected[each.status] 
+                                    : 
+                                    each.status 
+                                    ?  
+                                    questionStatus[each.status] 
+                                    : 
+                                    each._id===selectedQuestion._id
+                                    ? 
+                                    "border border-black bg-white text-black rounded-full"
+                                    : 
+                                    "border border-black bg-white"
+                                  }`}
+                                 onClick={()=>{
+                                    previousQuestionRef.current = selectedQuestion
+                                    if(!previousQuestionRef.current.status){
+                                        previousQuestionRef.current.status = "notAnswered"
+                                    }
+                                    setSelectedQuestion(each)
+                                }} 
+                                >
+                                    {each.status==="markedAndAnswered" && <div className='absolute top-[-10px] left-[22px]'>
+                                    < CheckRoundedIcon sx={{color: green[700],height:"18px",width:"18px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
+                                    </div>}
+                                    {each.id}
+                                </div>
                             )
                         })}
                    </div>
