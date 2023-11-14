@@ -107,7 +107,7 @@ const Questions = ({
         };
     });
 
-    console.log("qu",questionStatus)
+   
 
   return (
     <div className='flex-1'>

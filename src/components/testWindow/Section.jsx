@@ -104,6 +104,7 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
           scrollToItem={scrollToItem}
           attemptedAnswer={attemptedAnswer}
           questionStatusObj={questionStatus}
+          setQuestionStatus={setQuestionStatus}
           />
     </div>
 

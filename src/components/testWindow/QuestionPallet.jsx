@@ -43,7 +43,8 @@ const QuestionPallet = ({
     setSelectedSection,
     scrollToItem,
     attemptedAnswer,
-    questionStatusObj
+    questionStatusObj,
+    setQuestionStatus
 }) => {
     const { userData } = useAuth()
     const [open, setOpen] = React.useState(false);
@@ -55,7 +56,6 @@ const QuestionPallet = ({
     const handleClose = () => {
       setOpen(false);
     };
-   
     const statesCountFun=()=>{
         const questionLists = questionStatusObj[selectedSection.section_name]
 
@@ -137,7 +137,6 @@ const QuestionPallet = ({
         );
     }
 
-    console.log("hello",Object.entries(questionStatusObj)[selectedSection.id-1])
 
     if(!dialog && Object.entries(questionStatusObj).length>0){
         return (
@@ -210,38 +209,46 @@ const QuestionPallet = ({
                     </div>
         
                    <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
-                        {selectedSection.question_list.map((each)=>{
+                        {Object.entries(questionStatusObj)[selectedSection.id-1][1].map((each)=>{
                             return(
                                 <div 
-                                 key={each._id}
+                                 key={each.index}
                                  className={`
                                   relative h-7 w-10  flex justify-center items-center font-medium cursor-pointer  
-                                  ${(each.status && each._id===selectedQuestion._id) 
-                                    ? 
-                                    questionStatusSelected[each.status] 
+                                  ${(each.status!=="notVisited" && each.index===selectedQuestion.id) ? questionStatusSelected[each.status] 
                                     : 
-                                    each.status 
-                                    ?  
-                                    questionStatus[each.status] 
+                                    each.status!=="notVisited" ?  questionStatus[each.status] 
                                     : 
-                                    each._id===selectedQuestion._id
-                                    ? 
-                                    "border border-black bg-white text-black rounded-full"
-                                    : 
-                                    "border border-black bg-white"
+                                    each.index===selectedQuestion.id ? "border border-black bg-white text-black rounded-full": "border border-black bg-white"
                                   }`}
                                  onClick={()=>{
-                                    previousQuestionRef.current = selectedQuestion
-                                    if(!previousQuestionRef.current.status){
+                                   
+                                    let curr_ques= Object.entries(questionStatusObj)[selectedSection.id-1][1].find(ques=>ques.index===selectedQuestion.id)
+                                    previousQuestionRef.current = curr_ques
+                                    if(previousQuestionRef.current.status==="notVisited"){
                                         previousQuestionRef.current.status = "notAnswered"
+                                        setQuestionStatus((prevStatus) => {
+                                            const updatedStatus = { ...prevStatus };
+                                            updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                              if (selectedQuestion.id === idx + 1) {
+                                                return {status:"notAnswered",index:idx+1};
+                                              }
+                                              return stat;
+                                            });
+                                            return updatedStatus;
+                                        });
                                     }
-                                    setSelectedQuestion(each)
+                                   
+                                    let ques=selectedSection.question_list.find(ques=> ques.id===each.index)
+                                    setTimeout(()=>{
+                                        setSelectedQuestion(ques)
+                                    },0)
                                 }} 
                                 >
                                     {each.status==="markedAndAnswered" && <div className='absolute top-[-10px] left-[22px]'>
                                     < CheckRoundedIcon sx={{color: green[700],height:"18px",width:"18px" , strokeWidth: 4, stroke: green[500],}} className='font-bold'/>
                                     </div>}
-                                    {each.id}
+                                    {each.index}
                                 </div>
                             )
                         })}
