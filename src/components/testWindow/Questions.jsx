@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useStopwatch } from 'react-timer-hook';
-import { formatTime } from '../helper/MinTwoDigit';
+
 
 
 const Questions = ({
@@ -22,31 +20,24 @@ const Questions = ({
     setSelectedItem,
     containerRef,
     scrollToItem,
+    attemptedAnswer,
+    setAttemptedAnswer,
+    setQuestionStatus,
+    questionStatus,
 }) => {
-    const {
-        seconds,
-        minutes,
-        start,
-        pause,
-        reset,
-      } = useStopwatch({ autoStart: true });
-
+   
     const [selectedOption, setSelectedOption] = useState(null);
 
     const [timer, setTimer] = useState(0);
-    const timerKey = 'timerValue';
     if(timer%5===0){
-        console.log("timer",timer)
         selectedQuestion.timerVal=timer
     }
 
-    console.log(",sdfkj",selectedItem)
 
     useEffect(() => {
         // Load the timer value from localStorage when the component mounts
         // const storedTimerValue = localStorage.getItem(timerKey);
         const storedTimerValue = selectedQuestion?.timerVal ? selectedQuestion?.timerVal :  0;
-        console.log("timerStart",selectedQuestion)
        
         setTimer(parseInt(storedTimerValue));
         
@@ -76,13 +67,7 @@ const Questions = ({
       
     
     const handleRadioClick = (option) => {
-        if (selectedOption === option) {
-            // If the clicked option is already selected, clear the selection
-            setSelectedOption(null);
-        } else {
-            // Otherwise, select the clicked option
             setSelectedOption(option);
-        }
     };
 
     const [open, setOpen] = React.useState(false);
@@ -96,17 +81,29 @@ const Questions = ({
         setOpen(false);
     };
 
-    
+
 
     useEffect(()=>{
+      let sec = attemptedAnswer.find(each=>each.section===selectedSection.section_name)
+      console.log("sec",sec?.answer?.[selectedQuestion.id])
         setSelectedOption(null)
-        if(selectedQuestion.answerId){
-            handleRadioClick(selectedQuestion.answerId)
+        if(sec?.answer?.[selectedQuestion.id]){
+          console.log("dbobel")
+            handleRadioClick(sec?.answer?.[selectedQuestion.id])
         }
 
-    },[selectedQuestion])
+    },[selectedQuestion,selectedSection])
 
-    console.log("sleec",selectedOption)
+    let originalOptions=selectedQuestion.options
+
+    const convertedOptions = Object.keys(originalOptions).map(key => {
+        return {
+            id: parseInt(key),
+            value: originalOptions[key]
+        };
+    });
+
+   
 
   return (
     <div className='flex-1'>
@@ -117,15 +114,16 @@ const Questions = ({
             </div>}
             {questionData.map((each,index)=>(
               <div 
-               className={`scrollable-item ${selectedItem === index ? "selected" : ""} py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.name===each.name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
+               key={each._id}
+               className={`scrollable-item capitalize ${selectedItem === index ? "selected" : ""} py-0.5 px-3 rounded-sm text-center  shrink-0 cursor-pointer ${selectedSection.section_name===each.section_name ? "bg-sky-600 text-white" : "hover:bg-gray-200"} `}
                onClick={()=>{
                 setSelectedSection(each)
-                setSelectedQuestion(each.questionList[0])
+                setSelectedQuestion(each.question_list[0])
                 setSelectedItem(index)
                 scrollToItem(index)
                }}
                >
-                {each.name}
+                {each.section_name}
               </div>
             ))}
         </div>
@@ -165,9 +163,9 @@ const Questions = ({
             <div className='Question '>{selectedQuestion.question}</div>
             <div className='Answer py-4'>
                 <div>
-                    {selectedQuestion.options.map((each,idx)=>(
-                        <div className=' hover:bg-gray-100 p-2' for="html" onClick={() => handleRadioClick(each.value)}>
-                            <input type="radio" name="radioOption" value={each.value} checked={selectedOption === each.value} />
+                    {convertedOptions.map((each,idx)=>(
+                        <div key={each._id} className=' hover:bg-gray-100 p-2 flex items-center' for="html" onClick={() => handleRadioClick(each.id)}>
+                            <input type="radio" name="radioOption" value={each.id} checked={selectedOption === each.id} />
                             <label for="html" className='ml-2'>{each.value}</label>
                         </div>
                     ))}
@@ -181,25 +179,88 @@ const Questions = ({
                     <div 
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      onClick={()=>{
-                        if(selectedQuestion.id < selectedSection?.questionList.length){
-                            setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
+                        if(selectedQuestion.id < selectedSection?.question_list.length){
+                            setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
+
+                               
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"markedAndAnswered",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                             }
+
                             else{
                                 selectedQuestion.status="marked"
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"marked",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
                             }
                         }
-                        if(selectedQuestion.id === selectedSection?.questionList.length){
-                            console.log("hello",selectedQuestion)
+                        if(selectedQuestion.id === selectedSection?.question_list.length){
                             if(selectedOption){
                                 selectedQuestion.status="markedAndAnswered"
                                 selectedQuestion.answerId=selectedOption
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"markedAndAnswered",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                                
                             }
                             else{
                                 selectedQuestion.status="marked"
+                                 
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"marked",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
                             }
                             handleClickOpen()
                         }
@@ -208,37 +269,108 @@ const Questions = ({
                     {bigScreenView ?"Mark for Review & Next":"Mark & Next"}
                     </div>
 
+
                     <div 
-                     onClick={()=>setSelectedOption(null)}
+                     onClick={()=>{
+                      setSelectedOption(null)
+                      setAttemptedAnswer(prevAttemptedAnswer => {
+                        return prevAttemptedAnswer.map(each => {
+                          if (each.section === selectedSection.section_name) {
+                            return {...each,answer: {...each.answer,[selectedQuestion.id]: null}}
+                          }
+                          return each
+                        });
+                       });
+                     }}
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      >
                     {bigScreenView ?"Clear Response":"Clear"}
-                     
                     </div>
 
+
                     <div 
-                     
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      onClick={()=>{
-                        if(selectedQuestion.id < selectedSection?.questionList.length){
-                            setSelectedQuestion(selectedSection?.questionList[selectedQuestion.id])
-                            if(selectedOption){
-                                selectedQuestion.status="answerd"
-                                selectedQuestion.answerId=selectedOption
-                            }
-                            else{
-                                selectedQuestion.status="notAnswered"
-                            }
-                        }
-                        if(selectedQuestion.id === selectedSection?.questionList.length){
-                            console.log("hello",selectedQuestion)
+                        if(selectedQuestion.id < selectedSection?.question_list.length){
+                            setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
                             if(selectedOption){
                                 selectedQuestion.status="answerd"
                                 selectedQuestion.answerId=selectedOption
                                
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"answerd",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
                             }
                             else{
                                 selectedQuestion.status="notAnswered"
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"notAnswered",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
+
+                            }
+                        }
+                        if(selectedQuestion.id === selectedSection?.question_list.length){
+                            if(selectedOption){
+                                selectedQuestion.status="answerd"
+                                selectedQuestion.answerId=selectedOption
+
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"answerd",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
+
+                                setAttemptedAnswer(prevAttemptedAnswer => {
+                                    return prevAttemptedAnswer.map(each => {
+                                      if (each.section === selectedSection.section_name) {
+                                        return {...each,answer: {...each.answer,[selectedQuestion.id]: selectedOption}}
+                                      }
+                                      return each
+                                    });
+                                });
+                               
+                            }
+                            else{
+                                selectedQuestion.status="notAnswered"
+                                setQuestionStatus((prevStatus) => {
+                                    const updatedStatus = { ...prevStatus };
+                                    updatedStatus[selectedSection.section_name] = prevStatus[selectedSection.section_name].map((stat, idx) => {
+                                      if (selectedQuestion.id === idx + 1) {
+                                        return {status:"notAnswered",index:idx+1};
+                                      }
+                                      return stat;
+                                    });
+                                    return updatedStatus;
+                                });
                             }
                             handleClickOpen()
                         }
@@ -263,16 +395,28 @@ const Questions = ({
           
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
-               You have reached the last question of the section. Do you want to go to the first Question ?
+            {questionData.length===selectedSection.id ? "You have reached the last question of the section. Do you want to go to First Question ?":"Do you want to go to next section ?"}
             </DialogContentText>
             </DialogContent>
             <DialogActions>
             <Button onClick={handleClose}>No</Button>
             <Button onClick={()=>{
-                setSelectedQuestion(selectedSection.questionList[0])
-                handleClose()
+                if(selectedSection.id<questionData.length){
+                    setTimeout(()=>{
+                        setSelectedSection(questionData[selectedSection.id])
+                        setSelectedQuestion(questionData[selectedSection.id].question_list[0])
+                    },200)
+                    handleClose()
+                }
+                else{
+                    setTimeout(()=>{
+                        setSelectedSection(questionData[0])
+                        setSelectedQuestion(questionData[0].question_list[0])
+                    },200)
+                    handleClose()
+                }
                 }} 
-                autoFocus>
+                >
                 Yes
             </Button>
             </DialogActions>

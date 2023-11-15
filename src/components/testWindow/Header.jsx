@@ -60,7 +60,7 @@ function Header({ expiryTimestamp }) {
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Stack direction="row" spacing={2}   alignItems="center">
-            <img src={testAppImage} alt='logo' className='h-8'/>
+            {/* <img src={testAppImage} alt='logo' className='h-8'/> */}
             <Typography
             component="p"
             variant="p"

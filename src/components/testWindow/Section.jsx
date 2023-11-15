@@ -1,23 +1,24 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Questions from './Questions';
 import QuestionPallet from './QuestionPallet';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
-import questionData from './../../data/questions.json'
+// import questionData from './../../data/questions.json'
 import DrawerPallet from './DrawerPallet';
 
 
 
 
 
-const Section = ({bigScreenView,state,toggleDrawer}) => {
+const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
     const [showPallet,setShowPallet]=useState(true)
     const [selectedSection, setSelectedSection]=useState(questionData[0])
-    const [selectedQuestion,setSelectedQuestion]=useState(questionData[0].questionList[0])
+    const [selectedQuestion,setSelectedQuestion]=useState(questionData[0]?.question_list[0])
     const previousQuestionRef = useRef(null);
     const [lastQuestionFlag,setLastQuestionFlag]=useState(0)
     const [selectedItem, setSelectedItem] = useState(null);
-
+    const [attemptedAnswer,setAttemptedAnswer]=useState([])
+    const [questionStatus,setQuestionStatus]=useState({})
     const containerRef = useRef(null);
   
   
@@ -26,6 +27,19 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
       item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     };
 
+    useEffect(()=>{
+      const answerTemplate= [...questionData].map(each=>({section:each.section_name}))
+      setAttemptedAnswer(answerTemplate)
+
+      let Qstatus={}
+      questionData.forEach(each=>{
+        Qstatus[each.section_name]=each.question_list.map((each,idx)=>{
+          return {status:"notVisited", index:idx+1}
+        })
+      })
+      setQuestionStatus(Qstatus)
+    },[])
+ 
     
   return (
     <div className='flex h-[calc(100dvh-65px)] relative'>
@@ -57,7 +71,7 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
         </section>}
 
         <Questions 
-        bigScreenView={bigScreenView}
+          bigScreenView={bigScreenView}
           questionData={questionData} 
           selectedSection={selectedSection} 
           setSelectedSection={setSelectedSection}
@@ -69,8 +83,12 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
           setSelectedItem={setSelectedItem}
           containerRef={containerRef}
           scrollToItem={scrollToItem}
-         
+          attemptedAnswer={attemptedAnswer}
+          setAttemptedAnswer={setAttemptedAnswer}
+          setQuestionStatus={setQuestionStatus}
+          questionStatus={questionStatus}
           />
+          
         <QuestionPallet 
           bigScreenView={bigScreenView}
           showPallet={showPallet} 
@@ -84,6 +102,9 @@ const Section = ({bigScreenView,state,toggleDrawer}) => {
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           scrollToItem={scrollToItem}
+          attemptedAnswer={attemptedAnswer}
+          questionStatusObj={questionStatus}
+          setQuestionStatus={setQuestionStatus}
           />
     </div>
 

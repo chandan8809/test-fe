@@ -1,7 +1,7 @@
 import React from 'react'
 import Lottie from 'react-lottie-player'
 import animationData from "../../assets/pageNotFound.json";
-import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 
 const NotFound = () => {
   return (

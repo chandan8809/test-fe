@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -21,7 +20,8 @@ import FaceIcon from '@mui/icons-material/Face';
 import { green, pink } from '@mui/material/colors';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate } from 'react-router-dom';
-
+import { examServiceObj } from '../../services/examServices';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const drawerWidth = 240;
 
@@ -30,10 +30,34 @@ function ResponsiveDrawer(props) {
   const navigator=useNavigate()
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const bigScreenView = useMediaQuery('(min-width:600px)');
+  const [listExam,setListExam]=React.useState([])
+  const [loading,setLoading]=React.useState(false)
+ 
+
+  React.useEffect(()=>{
+    const getAllExams= async()=>{
+      setLoading(true)
+      const response= await examServiceObj.getAllExam()
+      if(response.data){
+        const data= response.data
+        setListExam(data.quiz)
+      }
+      else{
+        console.log("error")
+      }
+      setLoading(false)
+    }
+
+    getAllExams()
+  },[])
+
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+
+ 
 
   const drawer = (
     <div>
@@ -131,74 +155,53 @@ function ResponsiveDrawer(props) {
       </Box>
       
 
-
-
-
-
       <Box
         component="main"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
+       >
         <Toolbar/>
-       <p className='font-medium text-2xl text-gray-600'>Your Recent Test Series</p>
 
-        <div className={`pt-8 flex gap-8 ${bigScreenView ? "w-full":"w-[370px]"}  overflow-scroll`}>
-            <div className=' shrink-0 w-60 border border-gray-300 h-48 rounded-md shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-100 '>
-                <div className='flex justify-between items-center'>
-                    <Avatar sx={{ bgcolor: green[500] }}>
-                    <FaceIcon />
-                    </Avatar>
-                    <Chip icon={<FaceIcon />} label="600 Students" variant="outlined" />
-                </div>
-                <div className='pt-4'>
-                <p>SSC English Previous Year Paper</p>
-                </div>
-                <div className='py-4'>
-                    <div className="p-1 rounded-sm bg-sky-700  text-center px-2 cursor-pointer text-white" onClick={()=>navigator("/test")}>
-                    Go To Test Series
-                    </div>
-                </div>
-            </div>
-            <div className='shrink-0 w-60 border border-gray-300 h-48 rounded-md shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-100 '>
-                <div className='flex justify-between items-center'>
-                    <Avatar sx={{ bgcolor: green[500] }}>
-                    <FaceIcon />
-                    </Avatar>
-                    <Chip icon={<FaceIcon />} label="600 Students" variant="outlined" />
-                </div>
-                <div className='pt-4'>
-                <p>SSC English Previous Year Paper</p>
-                </div>
-                <div className='py-4'>
-                    <div className="p-1 rounded-sm bg-sky-700  text-center px-2 cursor-pointer text-white">
-                    Go To Test Series
-                    </div>
-                </div>
-            </div>
-            <div className='shrink-0 w-60 border border-gray-300 h-48 rounded-md shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-100 '>
-                <div className='flex justify-between items-center'>
-                    <Avatar sx={{ bgcolor: green[500] }}>
-                    <FaceIcon />
-                    </Avatar>
-                    <Chip icon={<FaceIcon />} label="600 Students" variant="outlined" />
-                </div>
-                <div className='pt-4'>
-                <p>SSC English Previous Year Paper</p>
-                </div>
-                <div className='py-4'>
-                    <div className="p-1 rounded-sm bg-sky-700  text-center px-2 cursor-pointer text-white">
-                    Go To Test Series
-                    </div>
-                </div>
-            </div>
-        </div>
-       
-       
+      {loading ? 
+      <div className='flex w-full mt-10'>
+        <CircularProgress style={{margin:"auto"}}/> 
+      </div>
+       :
+       <div>
+        <p className='font-medium text-2xl text-gray-600'>Your Recent Test Series</p>
+
+          <div className={`pt-8 flex gap-8 ${bigScreenView ? "w-full":"w-[370px]"}  overflow-scroll`}>
+            {listExam.map(each=>(
+              <div key={each._id} className=' shrink-0 w-60 border border-gray-300 h-48 rounded-md shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-100 '>
+                  <div className='flex justify-between items-center'>
+                      <Avatar sx={{ bgcolor: green[500] }}>
+                      <FaceIcon />
+                      </Avatar>
+                      <Chip icon={<FaceIcon />} label="600 Students" variant="outlined" />
+                  </div>
+                  <div className='pt-4'>
+                  <p>SSC English Previous Year Paper</p>
+                  </div>
+                  <div className='py-4'>
+                      <div 
+                       className="p-1 rounded-sm bg-sky-700  text-center px-2 cursor-pointer text-white" 
+                       onClick={()=>{
+                        // localStorage.setItem('exam_id', JSON.stringify(each._id))
+                        navigator(`/test/${each._id}`)
+                       }}
+                      //  onClick={()=>onExamStart(each._id)}
+                       >
+                        Go To Test Series
+                      </div>
+                  </div>
+              </div>
+            )
+              
+            )}
+          </div>
+      </div>}
+
       </Box>
-
-
-
-
+      
     </Box>
   );
 }

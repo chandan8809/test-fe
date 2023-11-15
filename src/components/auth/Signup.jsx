@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -13,6 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { authServiceObj } from '../../services/authServices';
 import { useNavigate } from "react-router-dom";
 import { notify } from '../Notify';
+import { LoadingButton } from '@mui/lab';
 
 function Copyright(props) {
   return (
@@ -32,16 +32,12 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const [loading,setLoading]=React.useState(false)
   const navigate=useNavigate()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log({
-    //   firstName:data.get('firstName'),
-    //   lastName:data.get('lastName'),
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
+  
     const body={
         name:data.get('firstName'),
         lastName:data.get('lastName'),
@@ -54,15 +50,19 @@ export default function SignUp() {
   };
 
   const signup= async(body)=>{
+    setLoading(true)
     const response= await authServiceObj.signup(body)
     if(response.data){
         const data=response.data
         localStorage.setItem("userData", JSON.stringify(data))
-        navigate("/dashboard")
+        navigate("/login")
     }
     else{
-      notify("error","hero")
+      
+      const error=response.error
+      notify("error", error.data.msg)
     }
+    setLoading(false)
   }
 
   return (
@@ -81,7 +81,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+           Create Account
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -129,17 +129,22 @@ export default function SignUp() {
               </Grid>
              
             </Grid>
-            <Button
+
+            <LoadingButton
+              loading={loading}
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2}}
+              loadingPosition="start"
+            
             >
-              Sign Up
-            </Button>
+               Create Account
+            </LoadingButton>
+
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signin" variant="body2">
+                <Link href="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
