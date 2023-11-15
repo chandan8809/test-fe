@@ -11,6 +11,7 @@ import ResponsiveDrawer from './components/dashboard/MainContainer';
 import LoadingPage from './components/loadingPage/LoadingPage';
 import { initializeAxios } from './utils/axiosUtility';
 import { AuthProvider } from './contexts/UserContext';
+import Reports from './components/testWindow/Reports';
 
 
 initializeAxios()
@@ -51,6 +52,7 @@ function App() {
       <Routes>
         <Route path="/" element={ <LoadingPage/>} />
         <Route path="/test/:exam_id" element={ <MainWindow/>} />
+        <Route path="/result/:report_id" element={ <Reports/>} />
         <Route path="/login" element={ <SignIn/>} />
         <Route path="/register" element={ <SignUp/>} />
         <Route path="/dashboard" element={ <ResponsiveDrawer/>} />

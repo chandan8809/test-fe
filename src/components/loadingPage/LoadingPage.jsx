@@ -24,7 +24,7 @@ const LoadingPage = () => {
             navigate("/login")
         }
         else{
-            navigate("/login")
+            navigate("/dashboard")
         }
     } else {
         logout();

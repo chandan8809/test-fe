@@ -10,7 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useAuth } from '../../contexts/UserContext';
 import { examServiceObj } from '../../services/examServices';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const questionStatus={
     "answerd":"rounded-t-full bg-green-600  text-white",
@@ -52,6 +52,7 @@ const QuestionPallet = ({
     const handleClickOpen = () => {
       setOpen(true);
     };
+    const navigate=useNavigate()
   
     const handleClose = () => {
       setOpen(false);
@@ -94,6 +95,7 @@ const QuestionPallet = ({
         const response= await examServiceObj.submitTest({attempted:attemptedAnswer,quiz_id:exam_id})
         if(response.data){
             const data= response.data
+            navigate(`/result/${data.report_id}`)
         }
         else{
             console.log("error")

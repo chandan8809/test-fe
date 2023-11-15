@@ -1,5 +1,5 @@
 import { apiGetCall, apiPostCall, apiPutCall, apiPatchCall, apiDeleteCall } from '../config/apiConfig';
-import { GET_ALL_EXAM,SUBMIT_EXAM } from '../config/urlConfig'
+import { GET_ALL_EXAM,SUBMIT_EXAM,GET_ALL_REPORT } from '../config/urlConfig'
 
 
 class ExamService {
@@ -24,6 +24,16 @@ class ExamService {
 
     submitTest = async(body)=>{
         const response = await this.apiPostCall(SUBMIT_EXAM,body)
+        return response
+    }
+
+    listReport = async()=>{
+        const response = await this.apiGetCall(GET_ALL_REPORT)
+        return response
+    }
+
+    getReport = async({report_id})=>{
+        const response = await this.apiGetCall(`${GET_ALL_REPORT}/${report_id}`)
         return response
     }
 

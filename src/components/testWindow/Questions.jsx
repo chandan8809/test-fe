@@ -33,7 +33,6 @@ const Questions = ({
         selectedQuestion.timerVal=timer
     }
 
-    
 
     useEffect(() => {
         // Load the timer value from localStorage when the component mounts
@@ -68,13 +67,7 @@ const Questions = ({
       
     
     const handleRadioClick = (option) => {
-        if (selectedOption === option) {
-            // If the clicked option is already selected, clear the selection
-            setSelectedOption(null);
-        } else {
-            // Otherwise, select the clicked option
             setSelectedOption(option);
-        }
     };
 
     const [open, setOpen] = React.useState(false);
@@ -88,15 +81,18 @@ const Questions = ({
         setOpen(false);
     };
 
-    
+
 
     useEffect(()=>{
+      let sec = attemptedAnswer.find(each=>each.section===selectedSection.section_name)
+      console.log("sec",sec?.answer?.[selectedQuestion.id])
         setSelectedOption(null)
-        if(selectedQuestion.answerId){
-            handleRadioClick(selectedQuestion.answerId)
+        if(sec?.answer?.[selectedQuestion.id]){
+          console.log("dbobel")
+            handleRadioClick(sec?.answer?.[selectedQuestion.id])
         }
 
-    },[selectedQuestion])
+    },[selectedQuestion,selectedSection])
 
     let originalOptions=selectedQuestion.options
 
@@ -275,7 +271,17 @@ const Questions = ({
 
 
                     <div 
-                     onClick={()=>setSelectedOption(null)}
+                     onClick={()=>{
+                      setSelectedOption(null)
+                      setAttemptedAnswer(prevAttemptedAnswer => {
+                        return prevAttemptedAnswer.map(each => {
+                          if (each.section === selectedSection.section_name) {
+                            return {...each,answer: {...each.answer,[selectedQuestion.id]: null}}
+                          }
+                          return each
+                        });
+                       });
+                     }}
                      className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
                      >
                     {bigScreenView ?"Clear Response":"Clear"}

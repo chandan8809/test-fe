@@ -10,4 +10,9 @@ export const SIGNUP_URL=`${BASE_URL}/api/v1/auth/register`
 export const GET_ALL_EXAM=`${BASE_URL}/api/v1/exam`
 export const SUBMIT_EXAM=`${BASE_URL}/api/v1/exam/submit`
 
+//REPORT URL
+
+export const GET_ALL_REPORT=`${BASE_URL}/api/v1/report`
+
+
 
