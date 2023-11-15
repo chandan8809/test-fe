@@ -59,6 +59,9 @@ const Section = ({bigScreenView,state,toggleDrawer,questionData}) => {
           setSelectedItem={setSelectedItem}
           scrollToItem={scrollToItem}
          
+          attemptedAnswer={attemptedAnswer}
+          questionStatusObj={questionStatus}
+          setQuestionStatus={setQuestionStatus}
           />
 
          {bigScreenView &&<section className={`absolute top-[calc(50vh-60px)] ${showPallet ? "right-[300px]" :"right-[0px]"}`}>

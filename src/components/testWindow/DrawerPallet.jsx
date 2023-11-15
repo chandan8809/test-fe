@@ -17,7 +17,10 @@ export default function DrawerPallet({
     selectedItem,
     setSelectedItem,
     setSelectedSection,
-    scrollToItem
+    scrollToItem,
+    attemptedAnswer,
+    questionStatusObj,
+    setQuestionStatus
 }) {
   
   
@@ -45,6 +48,9 @@ export default function DrawerPallet({
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
             scrollToItem={scrollToItem}
+            attemptedAnswer={attemptedAnswer}
+            questionStatusObj={questionStatusObj}
+            setQuestionStatus={setQuestionStatus}
             />
           </Drawer>
         </React.Fragment>
