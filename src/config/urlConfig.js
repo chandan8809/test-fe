@@ -1,18 +1,18 @@
-const BASE_URL="https://testbe-pww30jqu.b4a.run"
+const BASE_URL="https://testbe-liong35l.b4a.run/"
 // const BASE_URL = "http://localhost:5000"
 
-export const LOGIN_URL=`${BASE_URL}/api/v1/auth/login`
+export const LOGIN_URL=`${BASE_URL}api/v1/auth/login`
 
-export const SIGNUP_URL=`${BASE_URL}/api/v1/auth/register`
+export const SIGNUP_URL=`${BASE_URL}api/v1/auth/register`
 
 //EXAM URL
 
-export const GET_ALL_EXAM=`${BASE_URL}/api/v1/exam`
-export const SUBMIT_EXAM=`${BASE_URL}/api/v1/exam/submit`
+export const GET_ALL_EXAM=`${BASE_URL}api/v1/exam`
+export const SUBMIT_EXAM=`${BASE_URL}api/v1/exam/submit`
 
 //REPORT URL
 
-export const GET_ALL_REPORT=`${BASE_URL}/api/v1/report`
+export const GET_ALL_REPORT=`${BASE_URL}api/v1/report`
 
 
 
