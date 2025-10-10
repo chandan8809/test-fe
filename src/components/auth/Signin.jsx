@@ -84,6 +84,14 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          <div className='mt-10'>
+          <Typography component="h1" variant="h6">
+             Guest@gmail.com
+          </Typography>
+         </div>
+          <Typography component="h1" variant="h6">
+             12345678
+          </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
