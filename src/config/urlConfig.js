@@ -1,4 +1,4 @@
-const BASE_URL="https://testbe-liong35l.b4a.run/"
+const BASE_URL="https://test-be-black.vercel.app/"
 // const BASE_URL = "http://localhost:5000"
 
 export const LOGIN_URL=`${BASE_URL}api/v1/auth/login`
