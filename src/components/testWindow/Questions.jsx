@@ -289,7 +289,7 @@ const Questions = ({
 
 
                     <div 
-                     className="p-1 rounded-sm bg-sky-300  text-center px-4 cursor-pointer"
+                     className="p-1 rounded-sm bg-green-300  text-center px-4 cursor-pointer"
                      onClick={()=>{
                         if(selectedQuestion.id < selectedSection?.question_list.length){
                             setSelectedQuestion(selectedSection?.question_list[selectedQuestion.id])
