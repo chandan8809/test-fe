@@ -5,6 +5,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import MobileHeader from './MobileHeader';
 import { examServiceObj } from '../../services/examServices';
 import { useParams } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const MainWindow = () => {
   const bigScreenView = useMediaQuery('(min-width:600px)');
@@ -22,7 +23,7 @@ const MainWindow = () => {
   };
 
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 600);
+  time.setSeconds(time.getSeconds() + 3600);
 
  useEffect(()=>{
   const onExamStart= async(examId)=>{
@@ -55,7 +56,9 @@ const MainWindow = () => {
  
 
   if(questionData.length===0){
-    return <div></div>
+    return <div className='flex w-full mt-10'>
+    <CircularProgress style={{margin:"auto"}}/> 
+  </div>
   }
 
   return (
