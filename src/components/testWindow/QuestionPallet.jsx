@@ -210,7 +210,7 @@ const QuestionPallet = ({
                         </div>
                     </div>
         
-                   <div className={`flex flex-wrap gap-3 p-4 overflow-scroll  ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
+                   <div className={`flex flex-wrap gap-3 p-4 overflow-scroll content-start ${dialog ?"h-[calc(100dvh-292px)]": "h-[calc(100vh-355px)]"} `}>
                         {Object.entries(questionStatusObj)[selectedSection.id-1][1].map((each)=>{
                             return(
                                 <div 
